@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Ilustrasi segelas es teh">
+  <rect width="400" height="260" fill="#ECFDF5"/>
+  <circle cx="200" cy="135" r="88" fill="#10B981" opacity="0.12"/>
+  <path d="M215 90 L242 35" stroke="#DC2626" stroke-width="8" stroke-linecap="round"/>
+  <polygon points="150,75 250,75 236,210 164,210" fill="#FFFFFF" opacity="0.9" stroke="#CBD5E1" stroke-width="3"/>
+  <polygon points="154,102 246,102 234,206 166,206" fill="#D97706"/>
+  <polygon points="158,135 242,135 234,206 166,206" fill="#B45309" opacity="0.6"/>
+  <rect x="170" y="92" width="24" height="24" rx="5" transform="rotate(-12 170 92)" fill="#E0F2FE" opacity="0.9"/>
+  <rect x="202" y="96" width="24" height="24" rx="5" transform="rotate(15 202 96)" fill="#BAE6FD" opacity="0.9"/>
+  <rect x="184" y="118" width="22" height="22" rx="5" transform="rotate(6 184 118)" fill="#E0F2FE" opacity="0.8"/>
+</svg>

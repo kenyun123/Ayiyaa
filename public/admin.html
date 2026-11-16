@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen User — Ayiyaaa</title>
+  <meta name="description" content="Panel admin Ayiyaaa untuk mengelola akun admin, seller, dan pembeli.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Outfit', 'sans-serif']
+          },
+          colors: {
+            chili: {
+              50: '#fef2f2', 100: '#fee2e2', 200: '#fecaca', 300: '#fca5a5', 400: '#f87171',
+              500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 800: '#991b1b', 900: '#7f1d1d'
+            },
+            terracotta: {
+              50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+              500: '#ea580c', 600: '#c2410c', 700: '#9a3412'
+            },
+            turmeric: {
+              50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24',
+              500: '#f59e0b', 600: '#d97706'
+            },
+            cream: { 50: '#FFFDF9', 100: '#FAF5EE', 200: '#F2E8D9' },
+            charcoal: '#1E1B18'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-chili-600 selection:text-white">
+  <header class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur-md border-b border-cream-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between py-3 md:h-20 gap-3">
+        <a href="/" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-chili-600 via-terracotta-500 to-turmeric-500 flex items-center justify-center text-white shadow-md shadow-chili-600/25">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 11h16a1 1 0 0 1 1 1v.5a7.5 7.5 0 0 1-15 0V12a1 1 0 0 1 1-1Z"/>
+              <path d="M8 20h8"/><path d="M12 19v1"/>
+              <path d="M7 7c0-1.5 1-2 1-3.5"/><path d="M12 7c0-1.5 1-2 1-3.5"/><path d="M17 7c0-1.5 1-2 1-3.5"/>
+            </svg>
+          </div>
+          <div>
+            <span class="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-charcoal block leading-none">Ayiyaaa</span>
+            <span class="text-[11px] text-stone-500 font-medium">Panel Admin</span>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <nav class="hidden md:flex items-center gap-1 text-sm font-bold">
+            <a href="/" class="px-3 py-2 rounded-xl text-stone-600 hover:text-charcoal hover:bg-cream-100">Katalog</a>
+            <a href="/dashboard.html" class="px-3 py-2 rounded-xl text-stone-600 hover:text-charcoal hover:bg-cream-100">Dashboard</a>
+            <a href="/admin.html" class="px-3 py-2 rounded-xl bg-white text-chili-600 border border-cream-200 shadow-sm">Manajemen User</a>
+          </nav>
+          <div data-auth-nav></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-charcoal">Manajemen User</h1>
+        <p class="text-sm text-stone-500">Buat, ubah, aktifkan, atau hapus akun admin, seller, dan pembeli.</p>
+      </div>
+      <button type="button" id="add-user-btn"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-chili-600 to-terracotta-600 hover:from-chili-700 hover:to-terracotta-700 text-white text-sm font-bold shadow-md shadow-chili-600/20 transition-all self-start">
+        <i data-lucide="user-plus" class="w-4 h-4"></i>
+        <span>Tambah User</span>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-sm">
+        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Total User</p>
+        <p id="summary-total" class="font-display font-extrabold text-3xl text-charcoal">0</p>
+      </div>
+      <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-sm">
+        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Admin</p>
+        <p id="summary-admin" class="font-display font-extrabold text-3xl text-chili-600">0</p>
+      </div>
+      <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-sm">
+        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Seller</p>
+        <p id="summary-seller" class="font-display font-extrabold text-3xl text-terracotta-600">0</p>
+      </div>
+      <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-sm">
+        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Pembeli</p>
+        <p id="summary-buyer" class="font-display font-extrabold text-3xl text-emerald-600">0</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-cream-200 shadow-sm overflow-hidden">
+      <div class="p-5 border-b border-cream-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display font-bold text-lg text-charcoal">Daftar Akun</h2>
+          <p class="text-xs text-stone-500">Role menentukan akses: admin (user), seller (produk & kategori), pembeli (katalog).</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="user-search" placeholder="Cari nama atau email..."
+              class="w-full sm:w-56 pl-9 pr-3 py-2 rounded-xl border border-cream-200 bg-cream-50/50 text-xs focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+          </div>
+          <div class="relative">
+            <select id="role-filter"
+              class="w-full sm:w-40 appearance-none pl-3.5 pr-9 py-2 rounded-xl border border-cream-200 bg-white text-xs font-semibold text-charcoal focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500 cursor-pointer">
+              <option value="">Semua Role</option>
+              <option value="admin">Admin</option>
+              <option value="seller">Seller</option>
+              <option value="buyer">Pembeli</option>
+            </select>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-cream-100/70 border-b border-cream-200 text-[11px] font-bold uppercase tracking-wider text-stone-500">
+              <th class="py-3.5 px-4">User</th>
+              <th class="py-3.5 px-3">Role</th>
+              <th class="py-3.5 px-3">Status</th>
+              <th class="py-3.5 px-3 hidden sm:table-cell">Dibuat</th>
+              <th class="py-3.5 px-4 text-right">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="user-table-body" class="divide-y divide-cream-100 text-sm"></tbody>
+        </table>
+      </div>
+
+      <div id="user-empty" class="hidden p-10 text-center">
+        <p class="text-sm font-medium text-stone-500">Tidak ada user yang cocok dengan pencarian.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="user-modal" class="hidden fixed inset-0 z-[60] bg-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-cream-200 w-full max-w-md shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-cream-100 flex items-start justify-between">
+        <div>
+          <h3 id="user-modal-title" class="font-display font-bold text-lg text-charcoal">Tambah User</h3>
+          <p id="user-modal-subtitle" class="text-xs text-stone-500">Buat akun baru dengan role tertentu.</p>
+        </div>
+        <button type="button" id="user-modal-close" class="p-1.5 rounded-lg bg-cream-100 hover:bg-cream-200 text-stone-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <form id="user-form" class="p-5 space-y-4">
+        <input type="hidden" id="user-id">
+        <div>
+          <label for="user-nama" class="block text-xs font-bold text-charcoal mb-1.5">Nama Lengkap</label>
+          <input type="text" id="user-nama" required maxlength="120" placeholder="Nama pengguna"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+        </div>
+        <div>
+          <label for="user-email" class="block text-xs font-bold text-charcoal mb-1.5">Email</label>
+          <input type="email" id="user-email" required placeholder="nama@email.com"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="user-role" class="block text-xs font-bold text-charcoal mb-1.5">Role</label>
+            <select id="user-role"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+              <option value="buyer">Pembeli</option>
+              <option value="seller">Seller</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label for="user-password" class="block text-xs font-bold text-charcoal mb-1.5">Password</label>
+            <input type="password" id="user-password" minlength="8" autocomplete="new-password" placeholder="Min. 8 karakter"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            <p id="user-password-hint" class="text-[10px] text-stone-400 mt-1 hidden">Kosongkan jika tidak diubah.</p>
+          </div>
+        </div>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-cream-200 bg-cream-50/40 cursor-pointer select-none">
+          <input type="checkbox" id="user-active" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-stone-300">
+          <span class="text-xs font-bold text-charcoal">Akun aktif (dapat login)</span>
+        </label>
+        <div id="user-form-error" class="hidden p-3 rounded-xl bg-chili-50 border border-chili-200 text-chili-700 text-xs font-semibold"></div>
+        <div class="flex gap-2 pt-1">
+          <button type="button" id="user-cancel" class="flex-1 px-4 py-2.5 rounded-xl bg-cream-100 hover:bg-cream-200 text-stone-700 text-xs font-bold transition-colors">Batal</button>
+          <button type="submit" id="user-submit" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-chili-600 hover:bg-chili-700 text-white text-xs font-bold shadow-sm transition-colors">
+            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+            <span>Simpan User</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-cream-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-stone-500">
+      Ayiyaaa Street Bistro • Panel admin terhubung ke database MySQL.
+    </div>
+  </footer>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

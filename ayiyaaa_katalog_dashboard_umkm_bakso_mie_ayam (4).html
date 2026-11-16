@@ -1,0 +1,1652 @@
+<!-- ... existing code ... -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayiyaaa — Bakso & Mie Ayam Nusantara</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        chili: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626', // Primary Chili Red
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        },
+                        terracotta: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#ea580c', // Warm Terracotta
+                            600: '#c2410c',
+                            700: '#9a3412',
+                        },
+                        turmeric: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b', // Secondary Turmeric Gold
+                            600: '#d97706',
+                        },
+                        cream: {
+                            50: '#FFFDF9',
+                            100: '#FAF5EE',
+                            200: '#F2E8D9',
+                        },
+                        charcoal: '#1E1B18'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFFDF9;
+            color: #1E1B18;
+            background-image: radial-gradient(#F2E8D9 0.75px, transparent 0.75px);
+            background-size: 24px 24px;
+        }
+        .font-display {
+            font-family: 'Outfit', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF5EE;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6c7b2;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
+        /* Subtle card hover animation */
+        .product-card {
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 32px -12px rgba(220, 38, 38, 0.14), 0 8px 16px -8px rgba(30, 27, 24, 0.08);
+            border-color: #fdba74;
+        }
+        /* Shimmer effect for featured badge */
+        .badge-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-chili-600 selection:text-white">
+<!-- ... existing code ... -->
+    <!-- Sticky Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur-md border-b border-cream-200 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 md:h-20 gap-3">
+                <!-- Brand Logo -->
+                <div class="flex items-center justify-between">
+                    <a href="#" onclick="switchView('catalog'); return false;" class="flex items-center gap-3.5 group">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-chili-600 via-terracotta-500 to-turmeric-500 flex items-center justify-center text-white shadow-md shadow-chili-600/25 group-hover:scale-105 transition-transform">
+                            <!-- Custom Bowl SVG Icon -->
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 11h16a1 1 0 0 1 1 1v.5a7.5 7.5 0 0 1-15 0V12a1 1 0 0 1 1-1Z"/>
+                                <path d="M8 20h8"/>
+                                <path d="M12 19v1"/>
+                                <path d="M7 7c0-1.5 1-2 1-3.5"/>
+                                <path d="M12 7c0-1.5 1-2 1-3.5"/>
+                                <path d="M17 7c0-1.5 1-2 1-3.5"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-display font-extrabold text-2xl tracking-tight text-charcoal">Ayiyaaa</span>
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-turmeric-100 text-terracotta-700 border border-turmeric-200">Street Bistro</span>
+                            </div>
+                            <p class="text-xs text-stone-500 font-medium">Bakso Urat & Mie Ayam Racikan Asli</p>
+                        </div>
+                    </a>
+
+                    <!-- Mobile Reset Button -->
+                    <button onclick="handleResetData()" title="Reset ke 8 Data Awal" class="md:hidden inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 bg-cream-100 hover:bg-cream-200 border border-cream-200 transition-colors">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+
+                <!-- Dual-Mode Navigation Switcher & Reset -->
+                <div class="flex items-center justify-between md:justify-end gap-3">
+                    <nav class="flex p-1 bg-cream-100 rounded-2xl border border-cream-200 w-full md:w-auto" aria-label="Mode Tampilan">
+                        <button id="tab-catalog" onclick="switchView('catalog')" class="flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white text-chili-600 shadow-xs">
+                            <i data-lucide="store" class="w-4 h-4"></i>
+                            <span>Katalog Pembeli</span>
+                        </button>
+                        <button id="tab-dashboard" onclick="switchView('dashboard')" class="flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all text-stone-600 hover:text-charcoal">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                            <span>Dashboard Pengelola</span>
+                        </button>
+                    </nav>
+
+                    <button onclick="handleResetData()" title="Kembalikan 8 data produk awal" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-stone-700 bg-cream-100 hover:bg-cream-200 hover:text-charcoal border border-cream-200 transition-colors">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset Data Awal</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Custom Confirm Modal (Pengganti confirm() bawaan browser) -->
+    <div id="confirm-modal" class="hidden fixed inset-0 z-50 bg-charcoal/55 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-cream-200 max-w-sm w-full p-6 shadow-2xl">
+            <div class="w-12 h-12 rounded-2xl bg-chili-50 text-chili-600 flex items-center justify-center mb-4">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <h3 id="confirm-modal-title" class="font-display font-bold text-lg text-charcoal mb-1.5">Konfirmasi Tindakan</h3>
+            <p id="confirm-modal-desc" class="text-sm text-stone-500 leading-relaxed mb-6">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div class="flex items-center justify-end gap-2.5">
+                <button type="button" id="confirm-modal-cancel" class="px-4 py-2.5 rounded-xl text-xs font-bold text-stone-600 bg-cream-100 hover:bg-cream-200 transition-colors">
+                    Batal
+                </button>
+                <button type="button" id="confirm-modal-ok" class="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-chili-600 hover:bg-chili-700 shadow-sm transition-colors">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ========================================================= -->
+        <!-- VIEW 1: KATALOG PEMBELI                                   -->
+        <!-- ========================================================= -->
+        <section id="view-catalog" class="space-y-6 sm:space-y-8">
+            <!-- Hero Banner UMKM -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-chili-700 via-terracotta-600 to-turmeric-500 text-white p-6 sm:p-10 shadow-xl shadow-chili-600/15">
+                <!-- Decorative Culinary SVG Motif -->
+                <div class="absolute -right-14 -top-14 w-72 h-72 rounded-full bg-turmeric-300/20 blur-2xl pointer-events-none"></div>
+                <div class="absolute right-6 bottom-0 opacity-20 hidden sm:block pointer-events-none">
+                    <svg class="w-52 h-52" viewBox="0 0 160 160" fill="none">
+                        <circle cx="80" cy="80" r="70" stroke="white" stroke-width="2" stroke-dasharray="6 6"/>
+                        <path d="M30 85H130C130 112.61 107.61 135 80 135C52.39 135 30 112.61 30 85Z" fill="white"/>
+                        <circle cx="58" cy="70" r="14" fill="white"/>
+                        <circle cx="84" cy="64" r="16" fill="white"/>
+                        <circle cx="106" cy="72" r="12" fill="white"/>
+                        <path d="M40 52 Q65 40 90 52 T125 48" stroke="#FDE68A" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <div class="relative z-10 max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-charcoal/25 backdrop-blur-xs border border-white/15 text-xs font-semibold tracking-wide mb-4">
+                        <span class="w-2 h-2 rounded-full bg-turmeric-300 animate-pulse"></span>
+                        Buka Setiap Hari • 10.00 - 21.00 WIB
+                    </div>
+                    <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight mb-3 tracking-tight">
+                        Hangatnya Kaldu Asli & Mie Racikan Spesial!
+                    </h1>
+                    <p class="text-amber-50/95 text-sm sm:text-base leading-relaxed mb-6">
+                        Nikmati bakso urat daging sapi pilihan, mie ayam jamur gurih, hingga paket hemat mengenyangkan. Klik pesan untuk terhubung langsung ke WhatsApp kami.
+                    </p>
+                    <div class="flex flex-wrap items-center gap-2.5 text-xs sm:text-sm font-semibold">
+                        <span class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-white/15">
+                            <i data-lucide="award" class="w-4 h-4 text-turmeric-300"></i> 100% Daging Sapi Asli
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-white/15">
+                            <i data-lucide="flame" class="w-4 h-4 text-turmeric-300"></i> Sambal Rawit Segar
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-xs px-3.5 py-1.5 rounded-xl border border-white/15">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-turmeric-300"></i> Tanpa Pengawet
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search, Category Filter, and Sorting Controls -->
+            <div class="bg-white p-4 sm:p-5 rounded-3xl border border-cream-200 shadow-xs space-y-4">
+                <div class="flex flex-col md:flex-row gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input 
+                            type="text" 
+                            id="catalog-search" 
+                            placeholder="Cari bakso urat, mie ayam, paket hemat, atau minuman..." 
+                            class="w-full pl-10 pr-9 py-2.5 rounded-xl border border-cream-200 bg-cream-50 text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500 transition-all"
+                        >
+                        <button id="clear-search-btn" onclick="clearCatalogSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-charcoal">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Sorting Dropdown -->
+                    <div class="flex items-center gap-2 shrink-0">
+                        <label for="catalog-sort" class="text-xs font-bold text-stone-500 whitespace-nowrap">Urutkan:</label>
+                        <div class="relative w-full md:w-52">
+                            <select id="catalog-sort" class="w-full appearance-none pl-3.5 pr-9 py-2.5 rounded-xl border border-cream-200 bg-white text-sm font-semibold text-charcoal focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500 cursor-pointer">
+                                <option value="featured">Unggulan Dulu</option>
+                                <option value="price-asc">Harga Terendah</option>
+                                <option value="price-desc">Harga Tertinggi</option>
+                                <option value="name-asc">Nama A - Z</option>
+                                <option value="stock-desc">Stok Terbanyak</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Filter Pills -->
+                <div class="flex items-center justify-between gap-4 pt-2 border-t border-cream-100">
+                    <div id="category-pills" class="flex items-center gap-2 overflow-x-auto py-1">
+                        <!-- Rendered dynamically -->
+                    </div>
+                    <span id="catalog-result-count" class="text-xs font-semibold text-stone-500 whitespace-nowrap hidden sm:inline">
+                        Menampilkan 8 menu
+                    </span>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
+                <!-- Product Cards rendered via JS -->
+            </div>
+
+            <!-- Empty State for Catalog -->
+            <div id="catalog-empty" class="hidden bg-white rounded-3xl border border-cream-200 p-12 text-center max-w-lg mx-auto shadow-xs">
+                <div class="w-16 h-16 rounded-2xl bg-cream-100 text-chili-600 flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="search-x" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-display font-bold text-lg text-charcoal mb-1">Menu tidak ditemukan</h3>
+                <p class="text-sm text-stone-500 mb-5">Coba ubah kata kunci pencarian atau pilih kategori lain untuk melihat menu yang tersedia.</p>
+                <button onclick="resetCatalogFilters()" class="px-5 py-2.5 rounded-xl bg-chili-600 hover:bg-chili-700 text-white text-sm font-bold transition-colors">
+                    Tampilkan Semua Menu
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 2: DASHBOARD PENGELOLA (CRUD & RINGKASAN)            -->
+        <!-- ========================================================= -->
+        <section id="view-dashboard" class="hidden space-y-6 sm:space-y-8">
+            <!-- Header Dashboard -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-charcoal">Dashboard Pengelola Toko</h2>
+                    <p class="text-sm text-stone-500">Kelola daftar menu, upload foto makanan, atur stok harian, dan sorotan produk unggulan.</p>
+                </div>
+                <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-bold self-start">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Tersimpan Otomatis di Browser
+                </div>
+            </div>
+
+            <!-- WhatsApp Number Configuration Card -->
+            <div class="bg-white p-5 sm:p-6 rounded-3xl border border-cream-200 shadow-xs">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3.5">
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                            <i data-lucide="message-square" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display font-bold text-base text-charcoal mb-0.5">Nomor WhatsApp Penerima Pesanan</h3>
+                            <p class="text-xs text-stone-500">Nomor ini akan digunakan secara otomatis pada tombol pesan WhatsApp di katalog pembeli.</p>
+                        </div>
+                    </div>
+                    <form onsubmit="handleUpdateWhatsApp(event)" class="flex items-center gap-2 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-400">+</span>
+                            <input 
+                                type="text" 
+                                id="setting-whatsapp-input" 
+                                placeholder="6281234567890" 
+                                required
+                                class="w-full pl-7 pr-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-xs sm:text-sm font-semibold text-charcoal focus:outline-none focus:ring-2 focus:ring-emerald-500/25 focus:border-emerald-500"
+                            >
+                        </div>
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors shrink-0">
+                            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                            <span>Simpan No WA</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 4 Summary Stat Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Total Produk -->
+                <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-xs flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Total Produk</p>
+                        <p id="stat-total-products" class="font-display font-extrabold text-3xl text-charcoal">0</p>
+                        <p class="text-xs text-stone-500 mt-1">Varian menu terdaftar</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-2xl bg-chili-50 text-chili-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="utensils" class="w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- Total Stok Keseluruhan -->
+                <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-xs flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Total Stok</p>
+                        <p id="stat-total-stock" class="font-display font-extrabold text-3xl text-charcoal">0</p>
+                        <p class="text-xs text-stone-500 mt-1">Porsi siap jual hari ini</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-2xl bg-terracotta-50 text-terracotta-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- Kategori Aktif & Rincian -->
+                <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-xs flex flex-col justify-between">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Kategori Aktif</p>
+                            <p id="stat-active-categories" class="font-display font-extrabold text-3xl text-charcoal">0</p>
+                        </div>
+                        <div class="w-11 h-11 rounded-2xl bg-turmeric-50 text-turmeric-600 flex items-center justify-center shrink-0">
+                            <i data-lucide="tags" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div id="stat-category-breakdown" class="mt-2.5 pt-2 border-t border-cream-100 flex flex-wrap gap-1">
+                        <!-- Pills rincian kategori aktif -->
+                    </div>
+                </div>
+
+                <!-- Jumlah Produk Unggulan -->
+                <div class="bg-white p-5 rounded-3xl border border-cream-200 shadow-xs flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Menu Unggulan</p>
+                        <p id="stat-featured-count" class="font-display font-extrabold text-3xl text-charcoal">0</p>
+                        <p class="text-xs text-stone-500 mt-1">Badge emas di katalog</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                        <i data-lucide="star" class="w-5 h-5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid: Form CRUD (Left/Top) + Product Table (Right/Bottom) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Form Tambah / Edit Produk (5 cols on lg) -->
+                <div id="product-form-card" class="lg:col-span-5 bg-white rounded-3xl border border-cream-200 shadow-xs p-5 sm:p-6 lg:sticky lg:top-24">
+                    <div class="flex items-center justify-between mb-5 pb-3.5 border-b border-cream-100">
+                        <div class="flex items-center gap-2.5">
+                            <div id="form-mode-badge" class="w-9 h-9 rounded-xl bg-chili-100 text-chili-600 flex items-center justify-center">
+                                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            </div>
+                            <h3 id="form-title" class="font-display font-bold text-lg text-charcoal">Tambah Menu Baru</h3>
+                        </div>
+                        <button type="button" id="cancel-edit-btn" onclick="resetForm()" class="hidden text-xs font-bold text-stone-600 hover:text-charcoal px-3 py-1.5 rounded-xl bg-cream-100 hover:bg-cream-200 transition-colors">
+                            Batal Edit
+                        </button>
+                    </div>
+
+                    <form id="product-form" onsubmit="handleFormSubmit(event)" class="space-y-4" novalidate>
+                        <input type="hidden" id="prod-id">
+
+                        <!-- Nama Produk -->
+                        <div>
+                            <label for="prod-name" class="block text-xs font-bold text-charcoal mb-1.5">Nama Menu <span class="text-chili-600">*</span></label>
+                            <input type="text" id="prod-name" required placeholder="Contoh: Bakso Urat Mercon" class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                        </div>
+
+                        <!-- Kategori -->
+                        <div>
+                            <label for="prod-category" class="block text-xs font-bold text-charcoal mb-1.5">Kategori Produk <span class="text-chili-600">*</span></label>
+                            <select id="prod-category" onchange="handleCategoryFieldChange()" required class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-white text-sm font-medium text-charcoal focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                                <option value="Bakso">Bakso</option>
+                                <option value="Mie Ayam">Mie Ayam</option>
+                                <option value="Paket Hemat">Paket Hemat</option>
+                                <option value="Topping & Ekstra">Topping & Ekstra</option>
+                                <option value="Minuman">Minuman</option>
+                            </select>
+                        </div>
+
+                        <!-- Harga & Stok -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="prod-price" class="block text-xs font-bold text-charcoal mb-1.5">Harga (Rp) <span class="text-chili-600">*</span></label>
+                                <input type="number" id="prod-price" min="0" step="500" required placeholder="18000" class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                            </div>
+                            <div>
+                                <label for="prod-stock" class="block text-xs font-bold text-charcoal mb-1.5">Stok Porsi <span class="text-chili-600">*</span></label>
+                                <input type="number" id="prod-stock" min="0" step="1" required placeholder="20" class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                            </div>
+                        </div>
+
+                        <!-- Deskripsi -->
+                        <div>
+                            <label for="prod-desc" class="block text-xs font-bold text-charcoal mb-1.5">Deskripsi Singkat <span class="text-chili-600">*</span></label>
+                            <textarea id="prod-desc" rows="2" required placeholder="Jelaskan isian bakso, tekstur mie, atau rasa kuah..." class="w-full px-3.5 py-2 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500"></textarea>
+                        </div>
+
+                        <!-- FITUR UPLOAD FOTO LANGSUNG DARI PERANGKAT -->
+                        <div class="p-4 rounded-2xl bg-cream-100/70 border border-cream-200 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-charcoal flex items-center gap-1.5">
+                                    <i data-lucide="camera" class="w-3.5 h-3.5 text-chili-600"></i>
+                                    Upload Foto Menu
+                                </span>
+                                <span id="image-source-badge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-stone-600 border border-cream-200">
+                                    Placeholder Otomatis
+                                </span>
+                            </div>
+
+                            <!-- Preview & Upload Zone -->
+                            <div class="flex flex-col sm:flex-row items-stretch gap-3">
+                                <div class="relative w-full sm:w-28 h-32 sm:h-28 rounded-xl overflow-hidden border border-cream-200 bg-white shrink-0">
+                                    <img id="form-img-preview" src="" alt="Preview Menu" class="w-full h-full object-cover">
+                                    <button type="button" id="reset-uploaded-img-btn" onclick="removeUploadedImage()" title="Hapus foto yang diunggah" class="hidden absolute top-1.5 right-1.5 p-1.5 rounded-lg bg-charcoal/80 hover:bg-chili-600 text-white shadow-xs transition-colors">
+                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Tombol & Area Drag-Drop Upload -->
+                                <div id="image-dropzone" class="flex-1 flex flex-col items-center justify-center text-center p-3.5 rounded-xl border-2 border-dashed border-stone-300 hover:border-chili-500 bg-white/90 hover:bg-white transition-all">
+                                    <input type="file" id="prod-image-file" accept="image/*" class="hidden">
+                                    <button type="button" onclick="document.getElementById('prod-image-file').click()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-chili-600 hover:bg-chili-700 text-white text-xs font-bold shadow-xs transition-colors mb-1.5">
+                                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                                        <span>Pilih Foto dari Perangkat</span>
+                                    </button>
+                                    <span class="text-[11px] font-medium text-stone-600">atau seret file foto ke kotak ini</span>
+                                    <span class="text-[10px] text-stone-400 mt-0.5">Mendukung JPG, PNG, WebP (Otomatis dikompres)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Checkbox Unggulan -->
+                        <label class="flex items-center gap-3 p-3.5 rounded-2xl border border-cream-200 bg-cream-50/40 hover:bg-turmeric-50/50 cursor-pointer transition-colors select-none">
+                            <input type="checkbox" id="prod-featured" class="w-4 h-4 rounded text-chili-600 focus:ring-chili-500 border-stone-300">
+                            <div>
+                                <span class="block text-xs font-bold text-charcoal">Tandai sebagai Menu Unggulan</span>
+                                <span class="block text-[11px] text-stone-500">Mendapat badge emas berkilau dan tampil di urutan teratas.</span>
+                            </div>
+                        </label>
+
+                        <!-- Validation Error Banner -->
+                        <div id="form-error-msg" class="hidden p-3 rounded-xl bg-chili-50 border border-chili-200 text-chili-700 text-xs font-semibold flex items-center gap-2">
+                            <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+                            <span id="form-error-text">Mohon periksa kembali input Anda.</span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-1 flex gap-2">
+                            <button type="submit" id="form-submit-btn" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-chili-600 to-terracotta-600 hover:from-chili-700 hover:to-terracotta-700 text-white text-sm font-bold shadow-md shadow-chili-600/20 transition-all">
+                                <i data-lucide="save" class="w-4 h-4"></i>
+                                <span id="form-submit-text">Simpan Menu</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Daftar Manajemen Produk (7 cols on lg) -->
+                <div class="lg:col-span-7 bg-white rounded-3xl border border-cream-200 shadow-xs overflow-hidden">
+                    <div class="p-5 border-b border-cream-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="font-display font-bold text-lg text-charcoal">Daftar Inventaris Menu</h3>
+                            <p class="text-xs text-stone-500">Ubah stok cepat, atur menu unggulan, atau edit detail produk.</p>
+                        </div>
+                        <div class="relative w-full sm:w-60">
+                            <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" id="dashboard-search" placeholder="Cari di tabel..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-cream-200 bg-cream-50/50 text-xs focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-cream-100/70 border-b border-cream-200 text-[11px] font-bold uppercase tracking-wider text-stone-500">
+                                    <th class="py-3.5 px-4">Produk</th>
+                                    <th class="py-3.5 px-3">Harga</th>
+                                    <th class="py-3.5 px-3 text-center">Stok</th>
+                                    <th class="py-3.5 px-3 text-center">Unggulan</th>
+                                    <th class="py-3.5 px-4 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-table-body" class="divide-y divide-cream-100 text-sm">
+                                <!-- Rows rendered via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty state for dashboard search -->
+                    <div id="dashboard-empty" class="hidden p-10 text-center">
+                        <p class="text-sm font-medium text-stone-500">Tidak ada produk yang cocok dengan pencarian Anda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-cream-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+            <div class="flex items-center gap-2">
+                <span class="font-display font-bold text-charcoal">Ayiyaaa Street Bistro</span>
+                <span>•</span>
+                <span>Katalog & Dashboard Manajemen Produk UMKM</span>
+            </div>
+            <p>Penyimpanan lokal perangkat (<code class="px-1.5 py-0.5 rounded bg-cream-100 text-charcoal">localStorage</code>) • Kompresi foto otomatis aktif.</p>
+        </div>
+    </footer>
+
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT APPLICATION LOGIC                              -->
+    <!-- ========================================================= -->
+    <script>
+        /**
+         * 1. KONFIGURASI & ASET SVG LOKAL (DATA URI BEBAS HAK CIPTA)
+         */
+        const STORAGE_KEY = 'ayiyaaa_products_v2';
+        const WHATSAPP_PHONE_KEY = 'ayiyaaa_whatsapp_phone';
+        const DEFAULT_WHATSAPP_PHONE = '6281234567890';
+        const CATEGORIES = ['Semua', 'Bakso', 'Mie Ayam', 'Paket Hemat', 'Topping & Ekstra', 'Minuman'];
+
+        // Mapping default preset SVG untuk setiap kategori
+        const CATEGORY_DEFAULT_SVG_KEY = {
+            'Bakso': 'bakso_mercon',
+            'Mie Ayam': 'mie_ayam_ceker',
+            'Paket Hemat': 'paket_hemat',
+            'Topping & Ekstra': 'topping_ekstra',
+            'Minuman': 'es_teh'
+        };
+
+        function svgToDataUri(svgString) {
+            return 'data:image/svg+xml;utf8,' + encodeURIComponent(svgString.trim());
+        }
+
+        // Koleksi 8 Ilustrasi Kuliner Nusantara SVG Lokal
+        const LOCAL_SVG_LIBRARY = {
+            bakso_mercon: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <defs>
+                        <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#FEF2F2"/>
+                            <stop offset="100%" stop-color="#FED7AA"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="260" fill="url(#bg1)"/>
+                    <circle cx="200" cy="145" r="95" fill="#DC2626" opacity="0.1"/>
+                    <ellipse cx="200" cy="140" rx="108" ry="38" fill="#B91C1C"/>
+                    <ellipse cx="200" cy="142" rx="96" ry="30" fill="#DC2626"/>
+                    <circle cx="165" cy="128" r="28" fill="#8D5B4C"/>
+                    <circle cx="158" cy="120" r="8" fill="#A47162" opacity="0.6"/>
+                    <circle cx="228" cy="126" r="32" fill="#7C4D3F"/>
+                    <path d="M215 115 Q228 125 240 112" stroke="#5C352A" stroke-width="3" fill="none"/>
+                    <circle cx="195" cy="146" r="22" fill="#9C6656"/>
+                    <ellipse cx="145" cy="145" rx="9" ry="4" transform="rotate(-20 145 145)" fill="#7F1D1D"/>
+                    <ellipse cx="255" cy="142" rx="10" ry="4" transform="rotate(15 255 142)" fill="#7F1D1D"/>
+                    <circle cx="185" cy="122" r="4" fill="#16A34A"/>
+                    <circle cx="212" cy="138" r="4" fill="#15803D"/>
+                    <path d="M90 140 C90 205, 310 205, 310 140 Z" fill="#FFFDF9"/>
+                    <path d="M90 140 C90 155, 310 155, 310 140" fill="none" stroke="#DC2626" stroke-width="5"/>
+                    <rect x="155" y="196" width="90" height="12" rx="6" fill="#E7E5E4"/>
+                    <path d="M160 78 Q150 63 162 48" stroke="#EA580C" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.65"/>
+                    <path d="M200 70 Q190 55 202 40" stroke="#DC2626" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.65"/>
+                    <path d="M240 78 Q230 63 242 48" stroke="#EA580C" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.65"/>
+                </svg>
+            `),
+            bakso_beranak: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#FFFBEB"/>
+                    <ellipse cx="200" cy="142" rx="110" ry="38" fill="#EA580C"/>
+                    <path d="M142 135 A58 52 0 0 1 258 135 Z" fill="#7C4D3F"/>
+                    <path d="M155 135 Q175 156 195 135 Q215 158 242 135 Z" fill="#F59E0B"/>
+                    <circle cx="182" cy="126" r="12" fill="#9C6656"/>
+                    <circle cx="204" cy="123" r="13" fill="#8D5B4C"/>
+                    <circle cx="225" cy="128" r="11" fill="#9C6656"/>
+                    <path d="M88 142 C88 208, 312 208, 312 142 Z" fill="#1E1B18"/>
+                    <path d="M88 142 C88 158, 312 158, 312 142" fill="none" stroke="#F59E0B" stroke-width="5"/>
+                    <rect x="155" y="198" width="90" height="12" rx="6" fill="#0F0D0C"/>
+                </svg>
+            `),
+            mie_ayam_ceker: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#FEF3C7"/>
+                    <ellipse cx="200" cy="135" rx="95" ry="42" fill="#FBBF24"/>
+                    <path d="M125 135 Q160 110 200 135 T275 130" stroke="#D97706" stroke-width="6" fill="none"/>
+                    <path d="M135 145 Q175 120 215 145 T265 140" stroke="#B45309" stroke-width="5" fill="none"/>
+                    <circle cx="172" cy="118" r="14" fill="#78350F"/>
+                    <circle cx="192" cy="112" r="15" fill="#92400E"/>
+                    <circle cx="212" cy="120" r="13" fill="#78350F"/>
+                    <circle cx="188" cy="128" r="9" fill="#E7E5E4"/>
+                    <path d="M235 125 L262 105 M262 105 L275 98 M262 105 L278 108 M262 105 L270 118" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/>
+                    <ellipse cx="142" cy="125" rx="22" ry="12" transform="rotate(-15 142 125)" fill="#16A34A"/>
+                    <path d="M90 138 C90 205, 310 205, 310 138 Z" fill="#FFFDF9"/>
+                    <path d="M90 138 C90 154, 310 154, 310 138" fill="none" stroke="#16A34A" stroke-width="4"/>
+                    <circle cx="200" cy="174" r="12" fill="#DC2626" opacity="0.85"/>
+                    <rect x="155" y="196" width="90" height="12" rx="6" fill="#E5E7EB"/>
+                </svg>
+            `),
+            mie_yamin: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#FFEDD5"/>
+                    <ellipse cx="200" cy="136" rx="96" ry="42" fill="#9A3412"/>
+                    <path d="M122 135 Q160 112 200 136 T275 132" stroke="#7C2D12" stroke-width="6" fill="none"/>
+                    <path d="M135 144 Q175 120 215 144 T265 140" stroke="#C2410C" stroke-width="4" fill="none"/>
+                    <circle cx="185" cy="116" r="14" fill="#451A03"/>
+                    <circle cx="205" cy="118" r="13" fill="#78350F"/>
+                    <path d="M230 128 Q245 108 262 128 Z" fill="#FEF3C7"/>
+                    <circle cx="165" cy="130" r="4" fill="#22C55E"/>
+                    <circle cx="222" cy="132" r="4" fill="#DC2626"/>
+                    <path d="M90 138 C90 205, 310 205, 310 138 Z" fill="#1E1B18"/>
+                    <path d="M90 138 C90 154, 310 154, 310 138" fill="none" stroke="#DC2626" stroke-width="4"/>
+                    <rect x="155" y="196" width="90" height="12" rx="6" fill="#141210"/>
+                </svg>
+            `),
+            paket_hemat: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#FFF7ED"/>
+                    <!-- Mangkuk Bakso Kiri -->
+                    <ellipse cx="155" cy="148" rx="76" ry="26" fill="#EA580C"/>
+                    <circle cx="135" cy="138" r="20" fill="#8D5B4C"/>
+                    <circle cx="172" cy="136" r="22" fill="#7C4D3F"/>
+                    <path d="M78 148 C78 198, 232 198, 232 148 Z" fill="#FFFDF9"/>
+                    <path d="M78 148 C78 160, 232 160, 232 148" fill="none" stroke="#DC2626" stroke-width="4"/>
+                    <!-- Gelas Es Teh Kanan -->
+                    <path d="M295 85 L314 45" stroke="#DC2626" stroke-width="6" stroke-linecap="round"/>
+                    <polygon points="256,82 324,82 314,192 266,192" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2.5"/>
+                    <polygon points="260,104 320,104 312,188 268,188" fill="#D97706"/>
+                    <rect x="272" y="96" width="16" height="16" rx="4" fill="#E0F2FE" opacity="0.9"/>
+                    <rect x="292" y="100" width="16" height="16" rx="4" fill="#BAE6FD" opacity="0.9"/>
+                    <!-- Badge Paket -->
+                    <circle cx="235" cy="72" r="26" fill="#F59E0B"/>
+                    <text x="235" y="77" font-family="sans-serif" font-weight="bold" font-size="14" fill="#FFFFFF" text-anchor="middle">HEMAT</text>
+                </svg>
+            `),
+            topping_ekstra: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#FEFCE8"/>
+                    <ellipse cx="200" cy="184" rx="125" ry="30" fill="#E7E5E4"/>
+                    <ellipse cx="200" cy="180" rx="115" ry="24" fill="#FFFFFF"/>
+                    <!-- Pangsit Goreng -->
+                    <polygon points="125,168 172,102 204,170" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+                    <circle cx="168" cy="148" r="14" fill="#D97706"/>
+                    <polygon points="180,172 222,96 260,168" fill="#FBBF24" stroke="#B45309" stroke-width="2"/>
+                    <circle cx="220" cy="146" r="15" fill="#D97706"/>
+                    <!-- Tetelan Daging Sapi -->
+                    <rect x="235" y="145" width="34" height="22" rx="8" fill="#9A3412"/>
+                    <rect x="248" y="132" width="28" height="20" rx="7" fill="#B45309"/>
+                    <!-- Mangkuk Saus Sambal -->
+                    <ellipse cx="132" cy="178" rx="24" ry="10" fill="#DC2626"/>
+                    <path d="M108 178 C108 194, 156 194, 156 178 Z" fill="#1E1B18"/>
+                </svg>
+            `),
+            es_teh: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#ECFDF5"/>
+                    <circle cx="200" cy="135" r="88" fill="#10B981" opacity="0.12"/>
+                    <path d="M215 90 L242 35" stroke="#DC2626" stroke-width="8" stroke-linecap="round"/>
+                    <polygon points="150,75 250,75 236,210 164,210" fill="#FFFFFF" opacity="0.9" stroke="#CBD5E1" stroke-width="3"/>
+                    <polygon points="154,102 246,102 234,206 166,206" fill="#D97706"/>
+                    <polygon points="158,135 242,135 234,206 166,206" fill="#B45309" opacity="0.6"/>
+                    <rect x="170" y="92" width="24" height="24" rx="5" transform="rotate(-12 170 92)" fill="#E0F2FE" opacity="0.9"/>
+                    <rect x="202" y="96" width="24" height="24" rx="5" transform="rotate(15 202 96)" fill="#BAE6FD" opacity="0.9"/>
+                    <rect x="184" y="118" width="22" height="22" rx="5" transform="rotate(6 184 118)" fill="#E0F2FE" opacity="0.8"/>
+                </svg>
+            `),
+            es_jeruk: svgToDataUri(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260">
+                    <rect width="400" height="260" fill="#FFFBEB"/>
+                    <circle cx="200" cy="135" r="88" fill="#F59E0B" opacity="0.14"/>
+                    <path d="M215 90 L242 35" stroke="#16A34A" stroke-width="8" stroke-linecap="round"/>
+                    <polygon points="150,75 250,75 236,210 164,210" fill="#FFFFFF" opacity="0.9" stroke="#CBD5E1" stroke-width="3"/>
+                    <polygon points="154,100 246,100 234,206 166,206" fill="#F59E0B"/>
+                    <polygon points="158,136 242,136 234,206 166,206" fill="#EA580C" opacity="0.45"/>
+                    <!-- Irisan Jeruk Segar di Bibir Gelas -->
+                    <circle cx="155" cy="78" r="22" fill="#EA580C"/>
+                    <circle cx="155" cy="78" r="17" fill="#FBBF24"/>
+                    <line x1="155" y1="61" x2="155" y2="95" stroke="#FFFBEB" stroke-width="2"/>
+                    <line x1="138" y1="78" x2="172" y2="78" stroke="#FFFBEB" stroke-width="2"/>
+                    <!-- Es Batu -->
+                    <rect x="176" y="94" width="22" height="22" rx="5" transform="rotate(-10 176 94)" fill="#FEF3C7" opacity="0.85"/>
+                    <rect x="204" y="100" width="22" height="22" rx="5" transform="rotate(14 204 100)" fill="#FEF3C7" opacity="0.85"/>
+                </svg>
+            `)
+        };
+
+        /**
+         * 2. SEED DATA (8 PRODUK UMKM BAKSO & MIE AYAM DENGAN 5 KATEGORI)
+         */
+        const SEED_PRODUCTS = [
+            {
+                id: 'prod-1',
+                nama: 'Bakso Urat Mercon',
+                kategori: 'Bakso',
+                harga: 18000,
+                stok: 16,
+                deskripsi: 'Bakso urat sapi asli ukuran besar dengan isian sambal rawit domba pedas nampol dan kuah kaldu gurih.',
+                imageUrl: LOCAL_SVG_LIBRARY.bakso_mercon,
+                unggulan: true
+            },
+            {
+                id: 'prod-2',
+                nama: 'Bakso Beranak Jumbo',
+                kategori: 'Bakso',
+                harga: 25000,
+                stok: 9,
+                deskripsi: 'Bakso super jumbo berisi anakan bakso halus, telur puyuh, tetelan sapi, dan lelehan keju gurih.',
+                imageUrl: LOCAL_SVG_LIBRARY.bakso_beranak,
+                unggulan: true
+            },
+            {
+                id: 'prod-3',
+                nama: 'Mie Ayam Jamur Ceker',
+                kategori: 'Mie Ayam',
+                harga: 17000,
+                stok: 20,
+                deskripsi: 'Mie telur kenyal racikan sendiri dengan topping ayam jamur kecap manis gurih dan 3 ceker lunak.',
+                imageUrl: LOCAL_SVG_LIBRARY.mie_ayam_ceker,
+                unggulan: true
+            },
+            {
+                id: 'prod-4',
+                nama: 'Mie Ayam Yamin Pedas',
+                kategori: 'Mie Ayam',
+                harga: 16000,
+                stok: 18,
+                deskripsi: 'Mie yamin racikan kecap manis khas bistro dengan sambal bawang pedas, ayam cincang, dan pangsit rebus.',
+                imageUrl: LOCAL_SVG_LIBRARY.mie_yamin,
+                unggulan: false
+            },
+            {
+                id: 'prod-5',
+                nama: 'Paket Komplit Bakso + Es Teh',
+                kategori: 'Paket Hemat',
+                harga: 20000,
+                stok: 14,
+                deskripsi: 'Paket hemat mengenyangkan: 1 porsi Bakso Halus Komplit (5 butir + tahu) gratis 1 Es Teh Manis Jumbo.',
+                imageUrl: LOCAL_SVG_LIBRARY.paket_hemat,
+                unggulan: true
+            },
+            {
+                id: 'prod-6',
+                nama: 'Tetelan & Pangsit Goreng',
+                kategori: 'Topping & Ekstra',
+                harga: 9000,
+                stok: 0,
+                deskripsi: 'Porsi ekstra tetelan daging sapi empuk gurih ditambah 3 pcs pangsit goreng kriuk dengan saus sambal.',
+                imageUrl: LOCAL_SVG_LIBRARY.topping_ekstra,
+                unggulan: false
+            },
+            {
+                id: 'prod-7',
+                nama: 'Es Teh Manis Jumbo',
+                kategori: 'Minuman',
+                harga: 5000,
+                stok: 40,
+                deskripsi: 'Teh melati seduh segar dengan gula pasir murni dan es batu kristal dalam gelas ukuran jumbo.',
+                imageUrl: LOCAL_SVG_LIBRARY.es_teh,
+                unggulan: false
+            },
+            {
+                id: 'prod-8',
+                nama: 'Es Jeruk Peras Segar',
+                kategori: 'Minuman',
+                harga: 7000,
+                stok: 28,
+                deskripsi: 'Perasan jeruk pontianak asli kaya vitamin C dengan es batu segar, cocok penetral rasa pedas bakso.',
+                imageUrl: LOCAL_SVG_LIBRARY.es_jeruk,
+                unggulan: false
+            }
+        ];
+
+        /**
+         * 3. STATE MANAGEMENT & LOCALSTORAGE PERSISTENCE
+         */
+        let products = [];
+        let currentView = 'catalog';
+        let catalogFilter = {
+            search: '',
+            category: 'Semua',
+            sort: 'featured'
+        };
+        let dashboardSearch = '';
+        let editingProductId = null;
+        let currentFormImageUrl = LOCAL_SVG_LIBRARY.bakso_mercon;
+        let isUploadedCustomImage = false;
+        let storeWhatsAppPhone = DEFAULT_WHATSAPP_PHONE;
+
+        function loadProducts() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        products = parsed;
+                    } else {
+                        products = SEED_PRODUCTS.map(item => ({ ...item }));
+                    }
+                } else {
+                    products = SEED_PRODUCTS.map(item => ({ ...item }));
+                }
+                saveProducts();
+            } catch (err) {
+                console.warn('Gagal membaca localStorage, memuat data awal:', err);
+                products = SEED_PRODUCTS.map(item => ({ ...item }));
+            }
+
+            // Load WhatsApp Number
+            try {
+                const savedWa = localStorage.getItem(WHATSAPP_PHONE_KEY);
+                if (savedWa && savedWa.trim() !== '') {
+                    storeWhatsAppPhone = savedWa.trim();
+                } else {
+                    storeWhatsAppPhone = DEFAULT_WHATSAPP_PHONE;
+                }
+            } catch (err) {
+                storeWhatsAppPhone = DEFAULT_WHATSAPP_PHONE;
+            }
+        }
+
+        function saveProducts() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+            } catch (err) {
+                console.error('Gagal menyimpan ke localStorage:', err);
+                showToast('Kuota penyimpanan browser penuh! Coba gunakan gambar lebih kecil.', 'error');
+            }
+        }
+
+        /**
+         * 4. HELPER UTILITIES (FORMAT RUPIAH, ESCAPE HTML, TOAST, MODAL, WHATSAPP)
+         */
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Number(amount) || 0);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = String(text ?? '');
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const colors = {
+                success: 'bg-charcoal text-white border-stone-700',
+                error: 'bg-chili-600 text-white border-chili-700',
+                info: 'bg-terracotta-600 text-white border-terracotta-700'
+            };
+
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl border shadow-xl text-xs font-bold transition-all duration-300 translate-y-2 opacity-0 ${colors[type] || colors.success}`;
+            toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showConfirmDialog(title, desc, onConfirm) {
+            const modal = document.getElementById('confirm-modal');
+            const titleEl = document.getElementById('confirm-modal-title');
+            const descEl = document.getElementById('confirm-modal-desc');
+            const okBtn = document.getElementById('confirm-modal-ok');
+            const cancelBtn = document.getElementById('confirm-modal-cancel');
+
+            titleEl.textContent = title;
+            descEl.textContent = desc;
+            modal.classList.remove('hidden');
+
+            const cleanup = () => {
+                modal.classList.add('hidden');
+                okBtn.onclick = null;
+                cancelBtn.onclick = null;
+            };
+
+            cancelBtn.onclick = cleanup;
+            okBtn.onclick = () => {
+                cleanup();
+                onConfirm();
+            };
+        }
+
+        function buildWhatsAppLink(item) {
+            const message = `Halo Ayiyaaa Street Bistro! Saya ingin memesan:\n\n• *${item.nama}* (${item.kategori})\n• Harga: ${formatRupiah(item.harga)}\n• Jumlah: 1 porsi\n\nApakah menu ini masih tersedia? Terima kasih!`;
+            return `https://wa.me/${storeWhatsAppPhone}?text=${encodeURIComponent(message)}`;
+        }
+
+        function handleUpdateWhatsApp(event) {
+            event.preventDefault();
+            const inputEl = document.getElementById('setting-whatsapp-input');
+            let rawNum = inputEl.value.trim();
+            let cleaned = rawNum.replace(/\D/g, '');
+            
+            if (!cleaned || cleaned.length < 8) {
+                showToast('Nomor WhatsApp tidak valid. Masukkan nomor yang benar (cth: 628123... atau 08123...).', 'error');
+                return;
+            }
+
+            if (cleaned.startsWith('0')) {
+                cleaned = '62' + cleaned.substring(1);
+            }
+
+            storeWhatsAppPhone = cleaned;
+            try {
+                localStorage.setItem(WHATSAPP_PHONE_KEY, storeWhatsAppPhone);
+                inputEl.value = storeWhatsAppPhone;
+                showToast(`Nomor WhatsApp toko berhasil diperbarui ke +${storeWhatsAppPhone}!`);
+                renderDashboard();
+            } catch (err) {
+                showToast('Gagal menyimpan nomor WhatsApp ke penyimpanan.', 'error');
+            }
+        }
+
+        function handleResetData() {
+            showConfirmDialog(
+                'Reset ke Data Awal?',
+                'Semua perubahan, penambahan menu, atau foto kustom akan dikembalikan ke 8 data awal bawaan.',
+                () => {
+                    products = SEED_PRODUCTS.map(item => ({ ...item }));
+                    storeWhatsAppPhone = DEFAULT_WHATSAPP_PHONE;
+                    try {
+                        localStorage.removeItem(STORAGE_KEY);
+                        localStorage.removeItem(WHATSAPP_PHONE_KEY);
+                    } catch (e) {}
+                    saveProducts();
+                    resetForm();
+                    renderCategoryPills();
+                    if (currentView === 'catalog') {
+                        renderCatalog();
+                    } else {
+                        renderDashboard();
+                    }
+                    showToast('Data produk berhasil direset ke awal.', 'info');
+                }
+            );
+        }
+
+        function updateFormImagePreviewUI() {
+            const previewEl = document.getElementById('form-img-preview');
+            const badge = document.getElementById('image-source-badge');
+            const resetBtn = document.getElementById('reset-uploaded-img-btn');
+
+            previewEl.src = currentFormImageUrl;
+            if (isUploadedCustomImage) {
+                badge.textContent = 'Foto Perangkat Diunggah';
+                badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
+                resetBtn.classList.remove('hidden');
+            } else {
+                badge.textContent = 'Placeholder Otomatis';
+                badge.className = 'text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white text-stone-600 border border-cream-200';
+                resetBtn.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function removeUploadedImage() {
+            const category = document.getElementById('prod-category').value;
+            const defaultKey = CATEGORY_DEFAULT_SVG_KEY[category] || 'bakso_mercon';
+            document.getElementById('prod-image-file').value = '';
+            currentFormImageUrl = LOCAL_SVG_LIBRARY[defaultKey];
+            isUploadedCustomImage = false;
+            updateFormImagePreviewUI();
+            showToast('Foto dihapus, kembali ke placeholder otomatis.', 'info');
+        }
+
+        function switchView(viewName) {
+            currentView = viewName;
+            const catalogSection = document.getElementById('view-catalog');
+            const dashboardSection = document.getElementById('view-dashboard');
+            const tabCatalog = document.getElementById('tab-catalog');
+            const tabDashboard = document.getElementById('tab-dashboard');
+
+            if (viewName === 'catalog') {
+                catalogSection.classList.remove('hidden');
+                dashboardSection.classList.add('hidden');
+                
+                tabCatalog.className = 'flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white text-chili-600 shadow-xs';
+                tabDashboard.className = 'flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all text-stone-600 hover:text-charcoal';
+                
+                renderCatalog();
+            } else {
+                catalogSection.classList.add('hidden');
+                dashboardSection.classList.remove('hidden');
+                
+                tabDashboard.className = 'flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white text-chili-600 shadow-xs';
+                tabCatalog.className = 'flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all text-stone-600 hover:text-charcoal';
+                
+                renderDashboard();
+            }
+            lucide.createIcons();
+        }
+
+        /**
+         * 6. LOGIKA KATALOG PEMBELI (FILTER, SEARCH, SORT, RENDER)
+         */
+        function renderCategoryPills() {
+            const container = document.getElementById('category-pills');
+            if (!container) return;
+
+            container.innerHTML = CATEGORIES.map(cat => {
+                const isActive = catalogFilter.category === cat;
+                const count = cat === 'Semua'
+                    ? products.length
+                    : products.filter(p => p.kategori === cat).length;
+
+                return `
+                    <button 
+                        type="button"
+                        onclick="setCatalogCategory('${escapeHtml(cat)}')" 
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                            isActive
+                                ? 'bg-chili-600 text-white shadow-xs'
+                                : 'bg-cream-100 text-stone-700 hover:bg-cream-200 border border-cream-200'
+                        }"
+                    >
+                        <span>${escapeHtml(cat)}</span>
+                        <span class="px-1.5 py-0.5 rounded-md text-[10px] ${
+                            isActive ? 'bg-white/20 text-white' : 'bg-white text-stone-500'
+                        }">${count}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setCatalogCategory(category) {
+            catalogFilter.category = category;
+            renderCategoryPills();
+            renderCatalog();
+        }
+
+        function clearCatalogSearch() {
+            const input = document.getElementById('catalog-search');
+            input.value = '';
+            catalogFilter.search = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderCatalog();
+        }
+
+        function resetCatalogFilters() {
+            catalogFilter.search = '';
+            catalogFilter.category = 'Semua';
+            catalogFilter.sort = 'featured';
+            document.getElementById('catalog-search').value = '';
+            document.getElementById('catalog-sort').value = 'featured';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderCategoryPills();
+            renderCatalog();
+        }
+
+        function getFilteredCatalogProducts() {
+            const query = catalogFilter.search.trim().toLowerCase();
+
+            const filtered = products.filter(item => {
+                const matchCategory = catalogFilter.category === 'Semua' || item.kategori === catalogFilter.category;
+                const matchSearch = !query ||
+                    item.nama.toLowerCase().includes(query) ||
+                    item.deskripsi.toLowerCase().includes(query) ||
+                    item.kategori.toLowerCase().includes(query);
+                return matchCategory && matchSearch;
+            });
+
+            filtered.sort((a, b) => {
+                switch (catalogFilter.sort) {
+                    case 'price-asc':
+                        return a.harga - b.harga;
+                    case 'price-desc':
+                        return b.harga - a.harga;
+                    case 'name-asc':
+                        return a.nama.localeCompare(b.nama, 'id');
+                    case 'stock-desc':
+                        return b.stok - a.stok;
+                    case 'featured':
+                    default:
+                        if (a.unggulan === b.unggulan) {
+                            return a.nama.localeCompare(b.nama, 'id');
+                        }
+                        return a.unggulan ? -1 : 1;
+                }
+            });
+
+            return filtered;
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            const emptyState = document.getElementById('catalog-empty');
+            const countLabel = document.getElementById('catalog-result-count');
+            const items = getFilteredCatalogProducts();
+
+            if (countLabel) {
+                countLabel.textContent = `Menampilkan ${items.length} menu`;
+            }
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                lucide.createIcons();
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.classList.remove('hidden');
+
+            grid.innerHTML = items.map(item => {
+                const isOutOfStock = Number(item.stok) <= 0;
+                const isLowStock = !isOutOfStock && Number(item.stok) <= 5;
+                const waUrl = buildWhatsAppLink(item);
+
+                return `
+                <article class="product-card bg-white rounded-3xl border border-cream-200 shadow-xs overflow-hidden flex flex-col justify-between ${isOutOfStock ? 'opacity-85' : ''}">
+                    <div>
+                        <div class="relative aspect-[16/10] bg-cream-100 overflow-hidden">
+                            <img 
+                                src="${item.imageUrl}" 
+                                alt="${escapeHtml(item.nama)}" 
+                                onerror="this.src='${LOCAL_SVG_LIBRARY.bakso_mercon}'"
+                                class="w-full h-full object-cover ${isOutOfStock ? 'grayscale-[45%]' : ''}"
+                            >
+                            <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                                <span class="px-2.5 py-1 rounded-xl bg-charcoal/80 backdrop-blur-xs text-[11px] font-bold text-cream-50 shadow-xs">
+                                    ${escapeHtml(item.kategori)}
+                                </span>
+                                ${item.unggulan ? `
+                                    <span class="badge-gold inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-white text-[11px] font-extrabold tracking-wide">
+                                        <i data-lucide="star" class="w-3 h-3 fill-current"></i> Unggulan
+                                    </span>
+                                ` : ''}
+                            </div>
+
+                            ${isOutOfStock ? `
+                                <div class="absolute inset-0 bg-charcoal/55 backdrop-blur-[1px] flex items-center justify-center">
+                                    <span class="px-4 py-1.5 rounded-full bg-chili-600 text-white font-display font-bold text-xs uppercase tracking-wider shadow-md">
+                                        Stok Habis
+                                    </span>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="p-4 sm:p-5">
+                            <div class="flex items-start justify-between gap-2 mb-1.5">
+                                <h3 class="font-display font-bold text-base sm:text-lg text-charcoal leading-snug">
+                                    ${escapeHtml(item.nama)}
+                                </h3>
+                            </div>
+                            <p class="text-xs text-stone-500 line-clamp-2 leading-relaxed">
+                                ${escapeHtml(item.deskripsi)}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="px-4 sm:px-5 pb-4 sm:pb-5 pt-3 border-t border-cream-100 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-stone-400">Harga</span>
+                                <span class="font-display font-extrabold text-lg text-chili-600">
+                                    ${formatRupiah(item.harga)}
+                                </span>
+                            </div>
+                            <div class="text-right">
+                                ${isOutOfStock 
+                                    ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-chili-50 text-chili-600 text-xs font-bold">Habis</span>`
+                                    : isLowStock
+                                    ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-turmeric-100 text-terracotta-700 text-xs font-bold">Sisa ${item.stok}</span>`
+                                    : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-cream-100 text-stone-700 text-xs font-semibold">Stok: ${item.stok}</span>`
+                                }
+                            </div>
+                        </div>
+
+                        ${isOutOfStock ? `
+                            <button disabled class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-stone-200 text-stone-400 text-xs sm:text-sm font-bold cursor-not-allowed">
+                                <i data-lucide="slash" class="w-4 h-4"></i>
+                                <span>Stok Habis</span>
+                            </button>
+                        ` : `
+                            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white text-xs sm:text-sm font-bold shadow-xs transition-all">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                <span>Pesan via WhatsApp</span>
+                            </a>
+                        `}
+                    </div>
+                </article>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        /**
+         * 7. LOGIKA DASHBOARD PENGELOLA (STATISTIK & CRUD)
+         */
+        function renderDashboardStats() {
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, p) => sum + (Number(p.stok) || 0), 0);
+            const activeCategorySet = new Set(products.map(p => p.kategori));
+            const featuredCount = products.filter(p => Boolean(p.unggulan)).length;
+
+            document.getElementById('stat-total-products').textContent = totalProducts;
+            document.getElementById('stat-total-stock').textContent = totalStock.toLocaleString('id-ID');
+            document.getElementById('stat-active-categories').textContent = activeCategorySet.size;
+            document.getElementById('stat-featured-count').textContent = featuredCount;
+
+            const breakdownEl = document.getElementById('stat-category-breakdown');
+            const categoryCounts = {};
+            products.forEach(p => {
+                categoryCounts[p.kategori] = (categoryCounts[p.kategori] || 0) + 1;
+            });
+
+            const entries = Object.entries(categoryCounts);
+            if (entries.length === 0) {
+                breakdownEl.innerHTML = '<span class="text-[11px] text-stone-400">Belum ada kategori aktif</span>';
+            } else {
+                breakdownEl.innerHTML = entries.map(([cat, count]) => `
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-cream-100 text-stone-700 border border-cream-200">
+                        ${escapeHtml(cat)} (${count})
+                    </span>
+                `).join('');
+            }
+        }
+
+        function updateStock(id, delta) {
+            const idx = products.findIndex(p => p.id === id);
+            if (idx === -1) return;
+
+            const currentStock = Number(products[idx].stok) || 0;
+            const nextStock = Math.max(0, currentStock + delta);
+            products[idx].stok = nextStock;
+
+            saveProducts();
+            renderDashboard();
+        }
+
+        function toggleFeatured(id) {
+            const idx = products.findIndex(p => p.id === id);
+            if (idx === -1) return;
+
+            products[idx].unggulan = !products[idx].unggulan;
+            saveProducts();
+            renderDashboard();
+            showToast(
+                products[idx].unggulan
+                    ? `"${products[idx].nama}" ditandai sebagai Menu Unggulan.`
+                    : `"${products[idx].nama}" dihapus dari Menu Unggulan.`,
+                'info'
+            );
+        }
+
+        function deleteProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            showConfirmDialog(
+                'Hapus Menu Ini?',
+                `Menu "${product.nama}" akan dihapus secara permanen dari daftar katalog.`,
+                () => {
+                    products = products.filter(p => p.id !== id);
+                    if (editingProductId === id) {
+                        resetForm();
+                    }
+                    saveProducts();
+                    renderCategoryPills();
+                    renderDashboard();
+                    showToast(`Menu "${product.nama}" berhasil dihapus.`, 'info');
+                }
+            );
+        }
+
+        function renderDashboardTable() {
+            const tbody = document.getElementById('dashboard-table-body');
+            const emptyEl = document.getElementById('dashboard-empty');
+            const query = dashboardSearch.trim().toLowerCase();
+
+            const filtered = products.filter(p => {
+                if (!query) return true;
+                return p.nama.toLowerCase().includes(query) || p.kategori.toLowerCase().includes(query);
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyEl.classList.remove('hidden');
+                return;
+            }
+
+            emptyEl.classList.add('hidden');
+            tbody.innerHTML = filtered.map(item => {
+                const isEditingThis = editingProductId === item.id;
+                const stockZero = Number(item.stok) <= 0;
+
+                return `
+                    <tr class="transition-colors ${isEditingThis ? 'bg-turmeric-50/70' : 'hover:bg-cream-50/80'}">
+                        <td class="py-3.5 px-4">
+                            <div class="flex items-center gap-3">
+                                <img src="${item.imageUrl}" alt="${escapeHtml(item.nama)}" onerror="this.src='${LOCAL_SVG_LIBRARY.bakso_mercon}'" class="w-11 h-11 rounded-xl object-cover border border-cream-200 bg-cream-100 shrink-0">
+                                <div class="min-w-0">
+                                    <p class="font-bold text-charcoal text-xs sm:text-sm truncate max-w-[160px] sm:max-w-[210px]">${escapeHtml(item.nama)}</p>
+                                    <span class="inline-block mt-0.5 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-cream-100 text-stone-600">
+                                        ${escapeHtml(item.kategori)}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-3 font-bold text-xs sm:text-sm text-chili-600 whitespace-nowrap">
+                            ${formatRupiah(item.harga)}
+                        </td>
+                        <td class="py-3.5 px-3">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button type="button" onclick="updateStock('${item.id}', -1)" title="Kurangi stok" class="w-7 h-7 rounded-lg bg-cream-100 hover:bg-cream-200 text-charcoal font-bold flex items-center justify-center transition-colors">-</button>
+                                <span class="min-w-[2rem] text-center text-xs font-extrabold ${stockZero ? 'text-chili-600' : 'text-charcoal'}">${item.stok}</span>
+                                <button type="button" onclick="updateStock('${item.id}', 1)" title="Tambah stok" class="w-7 h-7 rounded-lg bg-cream-100 hover:bg-cream-200 text-charcoal font-bold flex items-center justify-center transition-colors">+</button>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-3 text-center">
+                            <button type="button" onclick="toggleFeatured('${item.id}')" title="Ubah status unggulan" class="inline-flex items-center justify-center w-8 h-8 rounded-xl border transition-all ${item.unggulan ? 'bg-turmeric-100 border-turmeric-300 text-amber-600' : 'bg-cream-50 border-cream-200 text-stone-300 hover:text-stone-500'}">
+                                <i data-lucide="star" class="w-4 h-4 ${item.unggulan ? 'fill-current' : ''}"></i>
+                            </button>
+                        </td>
+                        <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                            <div class="inline-flex items-center gap-1.5">
+                                <button type="button" onclick="startEditProduct('${item.id}')" title="Edit menu" class="p-2 rounded-xl bg-cream-100 hover:bg-turmeric-100 text-stone-700 hover:text-terracotta-700 transition-colors">
+                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button type="button" onclick="deleteProduct('${item.id}')" title="Hapus menu" class="p-2 rounded-xl bg-chili-50 hover:bg-chili-100 text-chili-600 transition-colors">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function renderDashboard() {
+            renderDashboardStats();
+            renderDashboardTable();
+            const waInput = document.getElementById('setting-whatsapp-input');
+            if (waInput) {
+                waInput.value = storeWhatsAppPhone;
+            }
+        }
+
+        /**
+         * 8. FORM TAMBAH / EDIT PRODUK & VALIDASI
+         */
+        function handleCategoryFieldChange() {
+            if (!isUploadedCustomImage) {
+                const category = document.getElementById('prod-category').value;
+                const defaultKey = CATEGORY_DEFAULT_SVG_KEY[category] || 'bakso_mercon';
+                currentFormImageUrl = LOCAL_SVG_LIBRARY[defaultKey];
+                updateFormImagePreviewUI();
+            }
+        }
+
+        function resetForm() {
+            editingProductId = null;
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-id').value = '';
+            document.getElementById('form-title').textContent = 'Tambah Menu Baru';
+            document.getElementById('form-submit-text').textContent = 'Simpan Menu';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+            document.getElementById('form-mode-badge').className = 'w-9 h-9 rounded-xl bg-chili-100 text-chili-600 flex items-center justify-center';
+            document.getElementById('form-mode-badge').innerHTML = '<i data-lucide="plus-circle" class="w-5 h-5"></i>';
+            document.getElementById('form-error-msg').classList.add('hidden');
+
+            const defaultCategory = document.getElementById('prod-category').value || 'Bakso';
+            const defaultKey = CATEGORY_DEFAULT_SVG_KEY[defaultCategory] || 'bakso_mercon';
+            currentFormImageUrl = LOCAL_SVG_LIBRARY[defaultKey];
+            isUploadedCustomImage = false;
+            updateFormImagePreviewUI();
+        }
+
+        function startEditProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            editingProductId = product.id;
+            document.getElementById('prod-id').value = product.id;
+            document.getElementById('prod-name').value = product.nama;
+            document.getElementById('prod-category').value = product.kategori;
+            document.getElementById('prod-price').value = product.harga;
+            document.getElementById('prod-stock').value = product.stok;
+            document.getElementById('prod-desc').value = product.deskripsi;
+            document.getElementById('prod-featured').checked = Boolean(product.unggulan);
+
+            currentFormImageUrl = product.imageUrl;
+            isUploadedCustomImage = !Object.values(LOCAL_SVG_LIBRARY).includes(product.imageUrl);
+            updateFormImagePreviewUI();
+
+            document.getElementById('form-title').textContent = 'Edit Menu: ' + product.nama;
+            document.getElementById('form-submit-text').textContent = 'Perbarui Menu';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('form-mode-badge').className = 'w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center';
+            document.getElementById('form-mode-badge').innerHTML = '<i data-lucide="pencil" class="w-5 h-5"></i>';
+            document.getElementById('form-error-msg').classList.add('hidden');
+
+            const formCard = document.getElementById('product-form-card');
+            if (formCard) {
+                formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            renderDashboardTable();
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('prod-name').value.trim();
+            const category = document.getElementById('prod-category').value;
+            const price = Number(document.getElementById('prod-price').value);
+            const stock = Number(document.getElementById('prod-stock').value);
+            const desc = document.getElementById('prod-desc').value.trim();
+            const featured = document.getElementById('prod-featured').checked;
+            const errorMsgEl = document.getElementById('form-error-msg');
+            const errorTextEl = document.getElementById('form-error-text');
+
+            if (!name || !category || isNaN(price) || isNaN(stock) || !desc) {
+                errorTextEl.textContent = 'Semua kolom bertanda wajib harus diisi dengan benar.';
+                errorMsgEl.classList.remove('hidden');
+                return;
+            }
+
+            if (price < 0 || stock < 0) {
+                errorTextEl.textContent = 'Harga dan stok tidak boleh bernilai negatif.';
+                errorMsgEl.classList.remove('hidden');
+                return;
+            }
+
+            errorMsgEl.classList.add('hidden');
+
+            if (editingProductId) {
+                const idx = products.findIndex(p => p.id === editingProductId);
+                if (idx !== -1) {
+                    products[idx] = {
+                        ...products[idx],
+                        nama: name,
+                        kategori: category,
+                        harga: price,
+                        stok: stock,
+                        deskripsi: desc,
+                        imageUrl: currentFormImageUrl,
+                        unggulan: featured
+                    };
+                    showToast(`Menu "${name}" berhasil diperbarui!`);
+                }
+            } else {
+                const newProduct = {
+                    id: 'prod-' + Date.now(),
+                    nama: name,
+                    kategori: category,
+                    harga: price,
+                    stok: stock,
+                    deskripsi: desc,
+                    imageUrl: currentFormImageUrl,
+                    unggulan: featured
+                };
+                products.unshift(newProduct);
+                showToast(`Menu "${name}" berhasil ditambahkan ke katalog!`);
+            }
+
+            saveProducts();
+            resetForm();
+            renderCategoryPills();
+            renderDashboard();
+        }
+
+        /**
+         * 9. IMAGE UPLOAD & COMPRESSION HANDLER (HTML5 CANVAS)
+         */
+        function setupImageUpload() {
+            const fileInput = document.getElementById('prod-image-file');
+            const dropzone = document.getElementById('image-dropzone');
+            if (!fileInput || !dropzone) return;
+
+            const processFile = (file) => {
+                if (!file || !file.type.startsWith('image/')) {
+                    showToast('Format file tidak didukung. Pilih file gambar (JPG/PNG/WebP).', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxWidth = 600;
+
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        currentFormImageUrl = canvas.toDataURL('image/jpeg', 0.82);
+                        isUploadedCustomImage = true;
+                        updateFormImagePreviewUI();
+                        showToast('Foto berhasil diunggah & dikompres otomatis!');
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    processFile(e.target.files[0]);
+                }
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.add('border-chili-500', 'bg-chili-50/30');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.remove('border-chili-500', 'bg-chili-50/30');
+                }, false);
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files && files[0]) {
+                    processFile(files[0]);
+                }
+            });
+        }
+
+        /**
+         * 10. INITIALIZATION ON WINDOW LOAD
+         */
+        window.onload = function () {
+            loadProducts();
+            renderCategoryPills();
+            renderCatalog();
+            renderDashboard();
+
+            // Setup search listeners
+            const catalogSearchInput = document.getElementById('catalog-search');
+            const clearSearchBtn = document.getElementById('clear-search-btn');
+            if (catalogSearchInput) {
+                catalogSearchInput.addEventListener('input', (e) => {
+                    catalogFilter.search = e.target.value;
+                    if (e.target.value.trim().length > 0) {
+                        clearSearchBtn.classList.remove('hidden');
+                    } else {
+                        clearSearchBtn.classList.add('hidden');
+                    }
+                    renderCatalog();
+                });
+            }
+
+            const catalogSortSelect = document.getElementById('catalog-sort');
+            if (catalogSortSelect) {
+                catalogSortSelect.addEventListener('change', (e) => {
+                    catalogFilter.sort = e.target.value;
+                    renderCatalog();
+                });
+            }
+
+            const dashboardSearchInput = document.getElementById('dashboard-search');
+            if (dashboardSearchInput) {
+                dashboardSearchInput.addEventListener('input', (e) => {
+                    dashboardSearch = e.target.value;
+                    renderDashboardTable();
+                });
+            }
+
+            setupImageUpload();
+            resetForm();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

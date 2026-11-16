@@ -1,0 +1,26 @@
+{
+  "name": "ayiyaaa-umkm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Katalog & manajemen UMKM Bakso Mie Ayam Ayiyaaa (Express + MySQL, multi-role)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:migrate": "node scripts/migrate.js",
+    "db:seed": "node scripts/seed.js",
+    "db:reset": "node scripts/migrate.js --fresh && node scripts/seed.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.1",
+    "multer": "^2.5.0",
+    "mysql2": "^3.11.5"
+  }
+}

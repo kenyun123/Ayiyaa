@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Ilustrasi paket hemat bakso dan es teh">
+  <rect width="400" height="260" fill="#FFF7ED"/>
+  <ellipse cx="155" cy="148" rx="76" ry="26" fill="#EA580C"/>
+  <circle cx="135" cy="138" r="20" fill="#8D5B4C"/>
+  <circle cx="172" cy="136" r="22" fill="#7C4D3F"/>
+  <path d="M78 148 C78 198, 232 198, 232 148 Z" fill="#FFFDF9"/>
+  <path d="M78 148 C78 160, 232 160, 232 148" fill="none" stroke="#DC2626" stroke-width="4"/>
+  <path d="M295 85 L314 45" stroke="#DC2626" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="256,82 324,82 314,192 266,192" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2.5"/>
+  <polygon points="260,104 320,104 312,188 268,188" fill="#D97706"/>
+  <rect x="272" y="96" width="16" height="16" rx="4" fill="#E0F2FE" opacity="0.9"/>
+  <rect x="292" y="100" width="16" height="16" rx="4" fill="#BAE6FD" opacity="0.9"/>
+  <circle cx="235" cy="72" r="26" fill="#F59E0B"/>
+  <text x="235" y="77" font-family="sans-serif" font-weight="bold" font-size="14" fill="#FFFFFF" text-anchor="middle">HEMAT</text>
+</svg>

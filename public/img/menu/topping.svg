@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Ilustrasi pangsit goreng dan tetelan sapi">
+  <rect width="400" height="260" fill="#FEFCE8"/>
+  <ellipse cx="200" cy="184" rx="125" ry="30" fill="#E7E5E4"/>
+  <ellipse cx="200" cy="180" rx="115" ry="24" fill="#FFFFFF"/>
+  <polygon points="125,168 172,102 204,170" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+  <circle cx="168" cy="148" r="14" fill="#D97706"/>
+  <polygon points="180,172 222,96 260,168" fill="#FBBF24" stroke="#B45309" stroke-width="2"/>
+  <circle cx="220" cy="146" r="15" fill="#D97706"/>
+  <rect x="235" y="145" width="34" height="22" rx="8" fill="#9A3412"/>
+  <rect x="248" y="132" width="28" height="20" rx="7" fill="#B45309"/>
+  <ellipse cx="132" cy="178" rx="24" ry="10" fill="#DC2626"/>
+  <path d="M108 178 C108 194, 156 194, 156 178 Z" fill="#1E1B18"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Ilustrasi semangkuk mie ayam">
+  <rect width="400" height="260" fill="#FEF3C7"/>
+  <ellipse cx="200" cy="135" rx="95" ry="42" fill="#FBBF24"/>
+  <path d="M125 135 Q160 110 200 135 T275 130" stroke="#D97706" stroke-width="6" fill="none"/>
+  <path d="M135 145 Q175 120 215 145 T265 140" stroke="#B45309" stroke-width="5" fill="none"/>
+  <circle cx="172" cy="118" r="14" fill="#78350F"/>
+  <circle cx="192" cy="112" r="15" fill="#92400E"/>
+  <circle cx="212" cy="120" r="13" fill="#78350F"/>
+  <circle cx="188" cy="128" r="9" fill="#E7E5E4"/>
+  <path d="M235 125 L262 105 M262 105 L275 98 M262 105 L278 108 M262 105 L270 118" stroke="#F59E0B" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="142" cy="125" rx="22" ry="12" transform="rotate(-15 142 125)" fill="#16A34A"/>
+  <path d="M90 138 C90 205, 310 205, 310 138 Z" fill="#FFFDF9"/>
+  <path d="M90 138 C90 154, 310 154, 310 138" fill="none" stroke="#16A34A" stroke-width="4"/>
+  <circle cx="200" cy="174" r="12" fill="#DC2626" opacity="0.85"/>
+  <rect x="155" y="196" width="90" height="12" rx="6" fill="#E5E7EB"/>
+</svg>

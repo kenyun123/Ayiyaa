@@ -1,0 +1,55 @@
+body {
+  background-color: #fffdf9;
+  color: #1e1b18;
+  background-image: radial-gradient(#f2e8d9 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+}
+
+.font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #faf5ee;
+}
+::-webkit-scrollbar-thumb {
+  background: #d6c7b2;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #dc2626;
+}
+
+.product-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 32px -12px rgba(220, 38, 38, 0.14), 0 8px 16px -8px rgba(30, 27, 24, 0.08);
+  border-color: #fdba74;
+}
+
+.badge-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #faf5ee 25%, #f2e8d9 37%, #faf5ee 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

@@ -112,30 +112,57 @@ function renderUsers() {
           </td>
           <td class="py-3.5 px-3">
             <span class="inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg ${
-              user.isActive ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-500'
+              user.approvalStatus === 'pending'
+                ? 'bg-amber-50 text-amber-700'
+                : user.isActive
+                ? 'bg-emerald-50 text-emerald-700'
+                : 'bg-stone-100 text-stone-500'
             }">
-              <span class="w-1.5 h-1.5 rounded-full ${user.isActive ? 'bg-emerald-500' : 'bg-stone-400'}"></span>
-              ${user.isActive ? 'Aktif' : 'Nonaktif'}
+              <span class="w-1.5 h-1.5 rounded-full ${
+                user.approvalStatus === 'pending'
+                  ? 'bg-amber-500'
+                  : user.isActive
+                  ? 'bg-emerald-500'
+                  : 'bg-stone-400'
+              }"></span>
+              ${
+                user.approvalStatus === 'pending'
+                  ? 'Menunggu Konfirmasi'
+                  : user.isActive
+                  ? 'Aktif'
+                  : 'Nonaktif'
+              }
             </span>
           </td>
           <td class="py-3.5 px-3 text-xs text-stone-500 hidden sm:table-cell">${formatDate(user.createdAt)}</td>
           <td class="py-3.5 px-4 text-right whitespace-nowrap">
             <div class="inline-flex items-center gap-1.5">
-              <button type="button" data-user-edit="${user.id}" title="Edit user"
-                class="p-2 rounded-xl bg-cream-100 hover:bg-turmeric-100 text-stone-700 hover:text-terracotta-700 transition-colors">
-                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-              </button>
-              <button type="button" data-user-status="${user.id}" title="${user.isActive ? 'Nonaktifkan' : 'Aktifkan'}"
-                ${isSelf ? 'disabled' : ''}
-                class="p-2 rounded-xl transition-colors ${
-                  isSelf
-                    ? 'bg-cream-50 text-stone-300 cursor-not-allowed'
-                    : user.isActive
-                    ? 'bg-amber-50 hover:bg-amber-100 text-amber-600'
-                    : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-600'
-                }">
-                <i data-lucide="${user.isActive ? 'user-x' : 'user-check'}" class="w-3.5 h-3.5"></i>
-              </button>
+              ${user.approvalStatus === 'pending' ? `
+                <button type="button" data-user-approve="${user.id}" title="Setujui seller"
+                  class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-600 transition-colors">
+                  <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" data-user-reject="${user.id}" title="Tolak seller"
+                  class="p-2 rounded-xl bg-chili-50 hover:bg-chili-100 text-chili-600 transition-colors">
+                  <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
+                </button>
+              ` : `
+                <button type="button" data-user-edit="${user.id}" title="Edit user"
+                  class="p-2 rounded-xl bg-cream-100 hover:bg-turmeric-100 text-stone-700 hover:text-terracotta-700 transition-colors">
+                  <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                </button>
+                <button type="button" data-user-status="${user.id}" title="${user.isActive ? 'Nonaktifkan' : 'Aktifkan'}"
+                  ${isSelf ? 'disabled' : ''}
+                  class="p-2 rounded-xl transition-colors ${
+                    isSelf
+                      ? 'bg-cream-50 text-stone-300 cursor-not-allowed'
+                      : user.isActive
+                      ? 'bg-amber-50 hover:bg-amber-100 text-amber-600'
+                      : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-600'
+                  }">
+                  <i data-lucide="${user.isActive ? 'user-x' : 'user-check'}" class="w-3.5 h-3.5"></i>
+                </button>
+              `}
               <button type="button" data-user-delete="${user.id}" title="Hapus user"
                 ${isSelf ? 'disabled' : ''}
                 class="p-2 rounded-xl transition-colors ${
@@ -163,6 +190,12 @@ function renderUsers() {
     if (button.disabled) return;
     button.addEventListener('click', () => deleteUser(Number(button.dataset.userDelete)));
   });
+  tbody.querySelectorAll('[data-user-approve]').forEach((button) => {
+    button.addEventListener('click', () => approveSeller(Number(button.dataset.userApprove)));
+  });
+  tbody.querySelectorAll('[data-user-reject]').forEach((button) => {
+    button.addEventListener('click', () => rejectSeller(Number(button.dataset.userReject)));
+  });
 
   if (window.lucide) window.lucide.createIcons();
 }
@@ -181,11 +214,17 @@ function openUserModal(user = null) {
 
   document.getElementById('user-nama').value = user ? user.nama : '';
   document.getElementById('user-email').value = user ? user.email : '';
+  document.getElementById('user-telepon').value = user ? (user.telepon || '') : '';
   document.getElementById('user-role').value = user ? user.role : 'buyer';
   document.getElementById('user-password').value = '';
+  document.getElementById('user-password-confirm').value = '';
   document.getElementById('user-password').required = !user;
+  document.getElementById('user-password-confirm').required = !user;
   document.getElementById('user-active').checked = user ? user.isActive : true;
   document.getElementById('user-password-hint').classList.toggle('hidden', !user);
+  document.getElementById('user-password-warning').classList.add('hidden');
+  resetPasswordToggle('user-password');
+  resetPasswordToggle('user-password-confirm');
 
   const lockSelf = user && App.user && user.id === App.user.id;
   document.getElementById('user-role').disabled = Boolean(lockSelf);
@@ -205,18 +244,43 @@ async function handleUserSubmit(event) {
 
   const id = document.getElementById('user-id').value;
   const password = document.getElementById('user-password').value;
+  const confirmPassword = document.getElementById('user-password-confirm').value;
+  const telepon = document.getElementById('user-telepon').value.trim();
   const errorBox = document.getElementById('user-form-error');
+  const passwordWarning = document.getElementById('user-password-warning');
   const submitButton = document.getElementById('user-submit');
+
+  passwordWarning.classList.add('hidden');
+  errorBox.classList.add('hidden');
+
+  if (!id && !password) {
+    passwordWarning.textContent = 'Password wajib diisi untuk user baru.';
+    passwordWarning.classList.remove('hidden');
+    return;
+  }
+  if (password || confirmPassword) {
+    if (password.length < 8) {
+      passwordWarning.textContent = 'Password minimal 8 karakter.';
+      passwordWarning.classList.remove('hidden');
+      return;
+    }
+    if (password !== confirmPassword) {
+      passwordWarning.textContent = 'Konfirmasi password tidak sama dengan password.';
+      passwordWarning.classList.remove('hidden');
+      return;
+    }
+  }
 
   const payload = {
     nama: document.getElementById('user-nama').value.trim(),
     email: document.getElementById('user-email').value.trim(),
+    telepon,
     role: document.getElementById('user-role').value,
     isActive: document.getElementById('user-active').checked
   };
 
   if (password) payload.password = password;
-  if (!id) payload.password = password;
+  if (!id && password) payload.password = password;
 
   errorBox.classList.add('hidden');
   setButtonLoading(submitButton, true, 'Menyimpan...');
@@ -280,6 +344,49 @@ async function deleteUser(id) {
     await API.delete(`/users/${id}`);
     await loadUsers();
     showToast(`User "${user.nama}" dihapus.`, 'info');
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+async function approveSeller(id) {
+  const user = adminState.users.find((item) => item.id === id);
+  if (!user) return;
+
+  const confirmed = await confirmAction({
+    title: 'Setujui Seller?',
+    desc: `Akun "${user.nama}" akan diaktifkan dan dapat mengelola produk.`,
+    confirmText: 'Ya, Setujui'
+  });
+  if (!confirmed) return;
+
+  try {
+    const data = await API.post(`/users/${id}/approve`);
+    await loadUsers();
+    showToast(`Akun "${user.nama}" disetujui.`);
+    if (data.whatsappUrl) {
+      window.open(data.whatsappUrl, '_blank');
+    }
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+async function rejectSeller(id) {
+  const user = adminState.users.find((item) => item.id === id);
+  if (!user) return;
+
+  const confirmed = await confirmAction({
+    title: 'Tolak Pendaftaran Seller?',
+    desc: `Akun "${user.nama}" akan ditolak dan tidak dapat login.`,
+    confirmText: 'Ya, Tolak'
+  });
+  if (!confirmed) return;
+
+  try {
+    await API.post(`/users/${id}/reject`);
+    await loadUsers();
+    showToast(`Pendaftaran "${user.nama}" ditolak.`, 'info');
   } catch (err) {
     showToast(err.message, 'error');
   }

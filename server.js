@@ -88,6 +88,9 @@ app.get('/dashboard.html', pageGuard('seller', 'admin'), (req, res) => {
 app.get('/admin.html', pageGuard('admin'), (req, res) => {
   res.sendFile(path.join(publicDir, 'admin.html'));
 });
+app.get('/buyer.html', pageGuard('buyer'), (req, res) => {
+  res.sendFile(path.join(publicDir, 'buyer.html'));
+});
 
 app.use(
   express.static(publicDir, {

@@ -159,6 +159,26 @@ function setButtonLoading(button, loading, loadingText = 'Memproses...') {
   }
 }
 
+function togglePasswordVisibility(inputId, button) {
+  const input = document.getElementById(inputId);
+  if (!input || !button) return;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  button.innerHTML = `<i data-lucide="${show ? 'eye-off' : 'eye'}" class="w-4 h-4"></i>`;
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function resetPasswordToggle(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  input.type = 'password';
+  const button = input.parentElement ? input.parentElement.querySelector('button[onclick*="togglePasswordVisibility"]') : null;
+  if (button) {
+    button.innerHTML = '<i data-lucide="eye" class="w-4 h-4"></i>';
+    if (window.lucide) window.lucide.createIcons();
+  }
+}
+
 function normalizeWhatsApp(raw) {
   let digits = String(raw || '').replace(/\D/g, '');
   if (digits.startsWith('0')) digits = '62' + digits.slice(1);
@@ -176,10 +196,16 @@ function renderAuthNav() {
   document.querySelectorAll('[data-auth-nav]').forEach((container, index) => {
     if (!App.user) {
       container.innerHTML = `
-        <button type="button" onclick="openLoginModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-charcoal text-white text-xs sm:text-sm font-bold hover:bg-stone-800 transition-colors">
-          <i data-lucide="log-in" class="w-4 h-4"></i>
-          <span>Masuk</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="openLoginModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-charcoal text-white text-xs sm:text-sm font-bold hover:bg-stone-800 transition-colors">
+            <i data-lucide="log-in" class="w-4 h-4"></i>
+            <span>Masuk</span>
+          </button>
+          <button type="button" onclick="openRegisterChoiceModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cream-100 hover:bg-cream-200 text-stone-700 text-xs sm:text-sm font-bold border border-cream-200 transition-colors">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Daftar</span>
+          </button>
+        </div>
       `;
       return;
     }
@@ -190,6 +216,9 @@ function renderAuthNav() {
     }
     if (App.user.role === 'admin') {
       links.push('<a href="/admin.html" class="block px-3 py-2 rounded-lg text-xs font-bold text-stone-700 hover:bg-cream-100">Manajemen User</a>');
+    }
+    if (App.user.role === 'buyer') {
+      links.push('<a href="/buyer.html" class="block px-3 py-2 rounded-lg text-xs font-bold text-stone-700 hover:bg-cream-100">Akun & Keranjang</a>');
     }
 
     container.innerHTML = `
@@ -269,8 +298,14 @@ function openLoginModal() {
             </div>
             <div>
               <label for="login-password" class="block text-xs font-bold text-charcoal mb-1.5">Password</label>
-              <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••"
-                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+              <div class="relative">
+                <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••"
+                  class="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                <button type="button" onclick="togglePasswordVisibility('login-password', this)"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-cream-100 transition-colors" aria-label="Tampilkan password">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
             </div>
             <div id="login-error" class="hidden p-3 rounded-xl bg-chili-50 border border-chili-200 text-chili-700 text-xs font-semibold"></div>
             <button type="submit" id="login-submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-chili-600 to-terracotta-600 hover:from-chili-700 hover:to-terracotta-700 text-white text-sm font-bold shadow-md transition-all">
@@ -280,6 +315,19 @@ function openLoginModal() {
             <div class="pt-2 border-t border-cream-100">
               <p class="text-[11px] font-bold text-stone-500 mb-2">Akun demo (klik untuk isi otomatis):</p>
               <div id="demo-accounts" class="grid grid-cols-3 gap-2"></div>
+            </div>
+            <div class="pt-2 border-t border-cream-100 text-center space-y-1">
+              <p class="text-[11px] text-stone-500 mb-1">Belum punya akun?</p>
+              <div class="flex items-center justify-center gap-3">
+                <button type="button" onclick="closeLoginModal(); openSellerRegisterModal();"
+                  class="text-xs font-bold text-terracotta-600 hover:text-terracotta-700 underline underline-offset-2">
+                  Daftar Seller
+                </button>
+                <button type="button" onclick="closeLoginModal(); openBuyerRegisterModal();"
+                  class="text-xs font-bold text-emerald-600 hover:text-emerald-700 underline underline-offset-2">
+                  Daftar Pembeli
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -411,3 +459,473 @@ document.addEventListener('DOMContentLoaded', () => {
     history.replaceState({}, '', window.location.pathname + (query ? `?${query}` : ''));
   }
 });
+
+function openSellerRegisterModal() {
+  let modal = document.getElementById('seller-register-modal');
+  if (!modal) {
+    modal = ensureElement(`
+      <div id="seller-register-modal" class="hidden fixed inset-0 z-[65] bg-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-cream-200 w-full max-w-md shadow-2xl overflow-hidden">
+          <div class="bg-gradient-to-br from-terracotta-600 to-turmeric-500 p-6 text-white">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="font-display font-extrabold text-xl">Daftar sebagai Seller</h3>
+                <p class="text-xs text-amber-50/90 mt-1">Akun seller akan aktif setelah dikonfirmasi admin.</p>
+              </div>
+              <button type="button" onclick="closeSellerRegisterModal()" class="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <form id="seller-register-form" class="p-6 space-y-4">
+            <div>
+              <label for="register-nama" class="block text-xs font-bold text-charcoal mb-1.5">Nama Lengkap</label>
+              <input type="text" id="register-nama" required maxlength="120" placeholder="Nama toko / penjual"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            </div>
+            <div>
+              <label for="register-email" class="block text-xs font-bold text-charcoal mb-1.5">Email</label>
+              <input type="email" id="register-email" required placeholder="nama@email.com"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            </div>
+            <div>
+              <label for="register-telepon" class="block text-xs font-bold text-charcoal mb-1.5">Nomor Telepon / WhatsApp</label>
+              <input type="tel" id="register-telepon" required maxlength="30" placeholder="08xxxxxxxxxx"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            </div>
+            <div>
+              <label for="register-password" class="block text-xs font-bold text-charcoal mb-1.5">Password</label>
+              <div class="relative">
+                <input type="password" id="register-password" required minlength="8" autocomplete="new-password" placeholder="Min. 8 karakter"
+                  class="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                <button type="button" onclick="togglePasswordVisibility('register-password', this)"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-cream-100 transition-colors" aria-label="Tampilkan password">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label for="register-password-confirm" class="block text-xs font-bold text-charcoal mb-1.5">Konfirmasi Password</label>
+              <div class="relative">
+                <input type="password" id="register-password-confirm" required minlength="8" autocomplete="new-password" placeholder="Ulangi password"
+                  class="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                <button type="button" onclick="togglePasswordVisibility('register-password-confirm', this)"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-cream-100 transition-colors" aria-label="Tampilkan password">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <p id="register-password-warning" class="hidden text-[11px] font-semibold text-chili-600 mt-1"></p>
+            </div>
+            <div id="register-error" class="hidden p-3 rounded-xl bg-chili-50 border border-chili-200 text-chili-700 text-xs font-semibold"></div>
+            <div id="register-success" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm space-y-3">
+              <p class="font-bold">Pendaftaran berhasil!</p>
+              <p class="text-xs">Akun seller Anda menunggu konfirmasi admin. Kirim notifikasi ke admin via WhatsApp agar segera diproses.</p>
+              <a id="register-whatsapp-link" href="#" target="_blank" rel="noopener"
+                class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>Kirim Notifikasi ke Admin</span>
+              </a>
+            </div>
+            <div class="flex gap-2 pt-1" id="register-actions">
+              <button type="button" onclick="closeSellerRegisterModal()"
+                class="flex-1 px-4 py-2.5 rounded-xl bg-cream-100 hover:bg-cream-200 text-stone-700 text-xs font-bold transition-colors">Batal</button>
+              <button type="submit" id="register-submit"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-terracotta-600 to-turmeric-500 hover:from-terracotta-700 hover:to-turmeric-600 text-white text-xs font-bold shadow-sm transition-colors">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>Daftar Seller</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `);
+    document.body.appendChild(modal);
+
+    modal.querySelector('#seller-register-form').addEventListener('submit', handleSellerRegisterSubmit);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeSellerRegisterModal();
+    });
+  }
+
+  modal.classList.remove('hidden');
+  resetSellerRegisterModal();
+  if (window.lucide) window.lucide.createIcons();
+  setTimeout(() => modal.querySelector('#register-nama').focus(), 50);
+}
+
+function closeSellerRegisterModal() {
+  const modal = document.getElementById('seller-register-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function resetSellerRegisterModal() {
+  const form = document.getElementById('seller-register-form');
+  if (!form) return;
+  form.reset();
+  document.getElementById('register-error').classList.add('hidden');
+  document.getElementById('register-success').classList.add('hidden');
+  document.getElementById('register-actions').classList.remove('hidden');
+  document.getElementById('register-password-warning').classList.add('hidden');
+  resetPasswordToggle('register-password');
+  resetPasswordToggle('register-password-confirm');
+}
+
+async function handleSellerRegisterSubmit(event) {
+  event.preventDefault();
+  const modal = document.getElementById('seller-register-modal');
+  const errorBox = modal.querySelector('#register-error');
+  const warningBox = modal.querySelector('#register-password-warning');
+  const submitButton = modal.querySelector('#register-submit');
+
+  errorBox.classList.add('hidden');
+  warningBox.classList.add('hidden');
+
+  const nama = modal.querySelector('#register-nama').value.trim();
+  const email = modal.querySelector('#register-email').value.trim();
+  const telepon = modal.querySelector('#register-telepon').value.trim();
+  const password = modal.querySelector('#register-password').value;
+  const confirmPassword = modal.querySelector('#register-password-confirm').value;
+
+  if (password.length < 8) {
+    warningBox.textContent = 'Password minimal 8 karakter.';
+    warningBox.classList.remove('hidden');
+    return;
+  }
+  if (password !== confirmPassword) {
+    warningBox.textContent = 'Konfirmasi password tidak sama dengan password.';
+    warningBox.classList.remove('hidden');
+    return;
+  }
+
+  setButtonLoading(submitButton, true, 'Mendaftar...');
+  try {
+    const data = await API.post('/auth/register-seller', { nama, email, telepon, password });
+    modal.querySelector('#register-actions').classList.add('hidden');
+    modal.querySelector('#register-success').classList.remove('hidden');
+    const link = modal.querySelector('#register-whatsapp-link');
+    if (data.whatsappUrl) {
+      link.href = data.whatsappUrl;
+      link.classList.remove('hidden');
+    } else {
+      link.classList.add('hidden');
+    }
+    showToast(data.message || 'Pendaftaran seller berhasil.');
+    if (window.lucide) window.lucide.createIcons();
+  } catch (err) {
+    errorBox.textContent = err.message;
+    errorBox.classList.remove('hidden');
+  } finally {
+    setButtonLoading(submitButton, false);
+  }
+}
+
+function openBuyerRegisterModal() {
+  let modal = document.getElementById('buyer-register-modal');
+  if (!modal) {
+    modal = ensureElement(`
+      <div id="buyer-register-modal" class="hidden fixed inset-0 z-[65] bg-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-cream-200 w-full max-w-md shadow-2xl overflow-hidden">
+          <div class="bg-gradient-to-br from-emerald-600 to-teal-500 p-6 text-white">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="font-display font-extrabold text-xl">Daftar sebagai Pembeli</h3>
+                <p class="text-xs text-emerald-50/90 mt-1">Akun langsung aktif setelah pendaftaran.</p>
+              </div>
+              <button type="button" onclick="closeBuyerRegisterModal()" class="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <form id="buyer-register-form" class="p-6 space-y-4">
+            <div>
+              <label for="buyer-register-nama" class="block text-xs font-bold text-charcoal mb-1.5">Nama Lengkap</label>
+              <input type="text" id="buyer-register-nama" required maxlength="120" placeholder="Nama pembeli"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            </div>
+            <div>
+              <label for="buyer-register-email" class="block text-xs font-bold text-charcoal mb-1.5">Email</label>
+              <input type="email" id="buyer-register-email" required placeholder="nama@email.com"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            </div>
+            <div>
+              <label for="buyer-register-telepon" class="block text-xs font-bold text-charcoal mb-1.5">Nomor Telepon / WhatsApp</label>
+              <input type="tel" id="buyer-register-telepon" required maxlength="30" placeholder="08xxxxxxxxxx"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+            </div>
+            <div>
+              <label for="buyer-register-password" class="block text-xs font-bold text-charcoal mb-1.5">Password</label>
+              <div class="relative">
+                <input type="password" id="buyer-register-password" required minlength="8" autocomplete="new-password" placeholder="Min. 8 karakter"
+                  class="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                <button type="button" onclick="togglePasswordVisibility('buyer-register-password', this)"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-cream-100 transition-colors" aria-label="Tampilkan password">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+            <div>
+              <label for="buyer-register-password-confirm" class="block text-xs font-bold text-charcoal mb-1.5">Konfirmasi Password</label>
+              <div class="relative">
+                <input type="password" id="buyer-register-password-confirm" required minlength="8" autocomplete="new-password" placeholder="Ulangi password"
+                  class="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-cream-200 bg-cream-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-chili-500/25 focus:border-chili-500">
+                <button type="button" onclick="togglePasswordVisibility('buyer-register-password-confirm', this)"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-cream-100 transition-colors" aria-label="Tampilkan password">
+                  <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <p id="buyer-register-password-warning" class="hidden text-[11px] font-semibold text-chili-600 mt-1"></p>
+            </div>
+            <div id="buyer-register-error" class="hidden p-3 rounded-xl bg-chili-50 border border-chili-200 text-chili-700 text-xs font-semibold"></div>
+            <div id="buyer-register-success" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm space-y-3">
+              <p class="font-bold">Pendaftaran berhasil!</p>
+              <p class="text-xs">Akun pembeli Anda sudah aktif. Kirim konfirmasi ke WhatsApp Anda.</p>
+              <a id="buyer-register-whatsapp-link" href="#" target="_blank" rel="noopener"
+                class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>Kirim Konfirmasi ke WhatsApp</span>
+              </a>
+            </div>
+            <div class="flex gap-2 pt-1" id="buyer-register-actions">
+              <button type="button" onclick="closeBuyerRegisterModal()"
+                class="flex-1 px-4 py-2.5 rounded-xl bg-cream-100 hover:bg-cream-200 text-stone-700 text-xs font-bold transition-colors">Batal</button>
+              <button type="submit" id="buyer-register-submit"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white text-xs font-bold shadow-sm transition-colors">
+                <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                <span>Daftar Pembeli</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `);
+    document.body.appendChild(modal);
+    modal.querySelector('#buyer-register-form').addEventListener('submit', handleBuyerRegisterSubmit);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeBuyerRegisterModal();
+    });
+  }
+  modal.classList.remove('hidden');
+  resetBuyerRegisterModal();
+  if (window.lucide) window.lucide.createIcons();
+  setTimeout(() => modal.querySelector('#buyer-register-nama').focus(), 50);
+}
+
+function closeBuyerRegisterModal() {
+  const modal = document.getElementById('buyer-register-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function resetBuyerRegisterModal() {
+  const form = document.getElementById('buyer-register-form');
+  if (!form) return;
+  form.reset();
+  document.getElementById('buyer-register-error').classList.add('hidden');
+  document.getElementById('buyer-register-success').classList.add('hidden');
+  document.getElementById('buyer-register-actions').classList.remove('hidden');
+  document.getElementById('buyer-register-password-warning').classList.add('hidden');
+  resetPasswordToggle('buyer-register-password');
+  resetPasswordToggle('buyer-register-password-confirm');
+}
+
+async function handleBuyerRegisterSubmit(event) {
+  event.preventDefault();
+  const modal = document.getElementById('buyer-register-modal');
+  const errorBox = modal.querySelector('#buyer-register-error');
+  const warningBox = modal.querySelector('#buyer-register-password-warning');
+  const submitButton = modal.querySelector('#buyer-register-submit');
+
+  errorBox.classList.add('hidden');
+  warningBox.classList.add('hidden');
+
+  const nama = modal.querySelector('#buyer-register-nama').value.trim();
+  const email = modal.querySelector('#buyer-register-email').value.trim();
+  const telepon = modal.querySelector('#buyer-register-telepon').value.trim();
+  const password = modal.querySelector('#buyer-register-password').value;
+  const confirmPassword = modal.querySelector('#buyer-register-password-confirm').value;
+
+  if (password.length < 8) {
+    warningBox.textContent = 'Password minimal 8 karakter.';
+    warningBox.classList.remove('hidden');
+    return;
+  }
+  if (password !== confirmPassword) {
+    warningBox.textContent = 'Konfirmasi password tidak sama dengan password.';
+    warningBox.classList.remove('hidden');
+    return;
+  }
+
+  setButtonLoading(submitButton, true, 'Mendaftar...');
+  try {
+    const data = await API.post('/auth/register-buyer', { nama, email, telepon, password });
+    modal.querySelector('#buyer-register-actions').classList.add('hidden');
+    modal.querySelector('#buyer-register-success').classList.remove('hidden');
+    const link = modal.querySelector('#buyer-register-whatsapp-link');
+    if (data.whatsappUrl) {
+      link.href = data.whatsappUrl;
+      link.classList.remove('hidden');
+    } else {
+      link.classList.add('hidden');
+    }
+    showToast(data.message || 'Pendaftaran pembeli berhasil.');
+    if (window.lucide) window.lucide.createIcons();
+  } catch (err) {
+    errorBox.textContent = err.message;
+    errorBox.classList.remove('hidden');
+  } finally {
+    setButtonLoading(submitButton, false);
+  }
+}
+
+/* ---------- Keranjang (Cart) ---------- */
+const CART_KEY = 'ayiyaaa.cart';
+
+function getCart() {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  } catch (err) {}
+}
+
+function addToCart(product, qty = 1) {
+  if (!product) return;
+  const cart = getCart();
+  const existing = cart.find((item) => Number(item.id) === Number(product.id));
+  if (existing) {
+    existing.qty = (Number(existing.qty) || 0) + qty;
+  } else {
+    cart.push({
+      id: product.id,
+      nama: product.nama,
+      harga: Number(product.harga) || 0,
+      imageUrl: product.imageUrl || '',
+      qty: qty
+    });
+  }
+  saveCart(cart);
+  showToast(`"${product.nama}" ditambahkan ke keranjang.`);
+  updateCartBadge();
+}
+
+function removeFromCart(productId) {
+  const cart = getCart().filter((item) => Number(item.id) !== Number(productId));
+  saveCart(cart);
+  updateCartBadge();
+}
+
+function updateCartQty(productId, qty) {
+  const cart = getCart();
+  const item = cart.find((item) => Number(item.id) === Number(productId));
+  if (!item) return;
+  const next = Number(qty);
+  if (!Number.isFinite(next) || next <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+  item.qty = Math.floor(next);
+  saveCart(cart);
+  updateCartBadge();
+}
+
+function clearCart() {
+  saveCart([]);
+  updateCartBadge();
+}
+
+function cartCount() {
+  return getCart().reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
+}
+
+function cartTotal() {
+  return getCart().reduce((sum, item) => sum + (Number(item.harga) || 0) * (Number(item.qty) || 0), 0);
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('cart-count-badge');
+  if (badge) {
+    const count = cartCount();
+    badge.textContent = count;
+    badge.classList.toggle('hidden', count === 0);
+  }
+}
+
+function addToCartProduct(productId) {
+  const source = window.__catalogProducts || [];
+  const product = source.find((item) => Number(item.id) === Number(productId));
+  if (product) {
+    addToCart(product);
+    return;
+  }
+  API.get('/catalog').then((data) => {
+    const found = (data.products || []).find((item) => Number(item.id) === Number(productId));
+    if (found) addToCart(found);
+  }).catch(() => {});
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartBadge();
+});
+
+function openRegisterChoiceModal() {
+  let modal = document.getElementById('register-choice-modal');
+  if (!modal) {
+    modal = ensureElement(`
+      <div id="register-choice-modal" class="hidden fixed inset-0 z-[65] bg-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border border-cream-200 w-full max-w-md shadow-2xl overflow-hidden">
+          <div class="bg-gradient-to-br from-chili-700 via-terracotta-600 to-turmeric-500 p-6 text-white">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="font-display font-extrabold text-xl">Daftar Akun Baru</h3>
+                <p class="text-xs text-amber-50/90 mt-1">Pilih jenis akun yang ingin Anda buat.</p>
+              </div>
+              <button type="button" onclick="closeRegisterChoiceModal()" class="p-1.5 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <div class="p-6 space-y-3">
+            <button type="button" onclick="closeRegisterChoiceModal(); openSellerRegisterModal();"
+              class="w-full flex items-center gap-3 p-4 rounded-2xl border border-cream-200 bg-cream-50 hover:bg-cream-100 transition-colors text-left">
+              <div class="w-11 h-11 rounded-xl bg-terracotta-50 text-terracotta-600 flex items-center justify-center shrink-0">
+                <i data-lucide="store" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="font-bold text-charcoal text-sm">Daftar sebagai Seller</p>
+                <p class="text-xs text-stone-500">Kelola menu & stok. Akun aktif setelah konfirmasi admin.</p>
+              </div>
+            </button>
+            <button type="button" onclick="closeRegisterChoiceModal(); openBuyerRegisterModal();"
+              class="w-full flex items-center gap-3 p-4 rounded-2xl border border-cream-200 bg-cream-50 hover:bg-cream-100 transition-colors text-left">
+              <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p class="font-bold text-charcoal text-sm">Daftar sebagai Pembeli</p>
+                <p class="text-xs text-stone-500">Lihat katalog, keranjang, dan checkout. Akun langsung aktif.</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    `);
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeRegisterChoiceModal();
+    });
+  }
+  modal.classList.remove('hidden');
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function closeRegisterChoiceModal() {
+  const modal = document.getElementById('register-choice-modal');
+  if (modal) modal.classList.add('hidden');
+}

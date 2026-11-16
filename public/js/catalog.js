@@ -134,6 +134,7 @@ async function loadProducts() {
       App.store = data.store;
       updateStoreCopy();
     }
+    window.__catalogProducts = data.products || [];
     renderProducts(data.products);
   } catch (err) {
     grid.innerHTML = '';
@@ -212,10 +213,16 @@ function renderProducts(products) {
               ? `<button type="button" disabled class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-stone-200 text-stone-400 text-xs sm:text-sm font-bold cursor-not-allowed">
                    <i data-lucide="slash" class="w-4 h-4"></i><span>Stok Habis</span>
                  </button>`
-              : `<a href="${buildWhatsAppLink(product)}" target="_blank" rel="noopener noreferrer"
-                   class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white text-xs sm:text-sm font-bold shadow-sm transition-all">
-                   <i data-lucide="message-circle" class="w-4 h-4"></i><span>Pesan via WhatsApp</span>
-                 </a>`}
+              : `<div class="flex gap-2">
+                   <a href="${buildWhatsAppLink(product)}" target="_blank" rel="noopener noreferrer"
+                     class="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white text-xs sm:text-sm font-bold shadow-sm transition-all">
+                     <i data-lucide="message-circle" class="w-4 h-4"></i><span>Pesan</span>
+                   </a>
+                   <button type="button" onclick="addToCartProduct(${product.id})"
+                     class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-cream-100 hover:bg-cream-200 text-stone-700 text-xs sm:text-sm font-bold border border-cream-200 transition-colors" title="Tambah ke keranjang">
+                     <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                   </button>
+                 </div>`}
           </div>
         </article>`;
     })

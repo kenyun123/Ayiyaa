@@ -34,6 +34,23 @@ async function main() {
   const schema = fs.readFileSync(path.join(__dirname, '..', 'db', 'schema.sql'), 'utf8');
   await conn.query(schema);
 
+  // Migrasi tambahan untuk database yang sudah ada sebelum kolom telepon ditambahkan.
+  const [cols] = await conn.query(
+    "SELECT COUNT(*) AS total FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'users' AND COLUMN_NAME = 'telepon'",
+    [DB_NAME]
+  );
+  if (Number(cols[0].total) === 0) {
+    await conn.query("ALTER TABLE users ADD COLUMN telepon VARCHAR(30) NOT NULL DEFAULT '' AFTER email");
+  }
+
+  const [approvalCols] = await conn.query(
+    "SELECT COUNT(*) AS total FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = 'users' AND COLUMN_NAME = 'approval_status'",
+    [DB_NAME]
+  );
+  if (Number(approvalCols[0].total) === 0) {
+    await conn.query("ALTER TABLE users ADD COLUMN approval_status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'approved' AFTER is_active");
+  }
+
   console.log(`Migrasi selesai. Database "${DB_NAME}" siap.`);
   await conn.end();
 }

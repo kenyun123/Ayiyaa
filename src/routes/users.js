@@ -1,13 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const pool = require('../db');
-const { ApiError, asyncHandler, toUser } = require('../utils');
+const { ApiError, asyncHandler, toUser, normalizeWhatsApp } = require('../utils');
 const { requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
 const ROLES = ['admin', 'seller', 'buyer'];
-const USER_SELECT = 'SELECT id, nama, email, role, is_active, created_at, updated_at FROM users';
+const USER_SELECT = 'SELECT id, nama, email, telepon, role, is_active, approval_status, created_at, updated_at FROM users';
 
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 190;
@@ -15,6 +15,10 @@ function validateEmail(email) {
 
 function validatePassword(password) {
   return typeof password === 'string' && password.length >= 8 && password.length <= 72;
+}
+
+function validatePhone(phone) {
+  return phone === '' || (/^[0-9+\-\s()]{6,30}$/.test(phone) && phone.length <= 30);
 }
 
 async function countActiveAdmins(excludeId = null) {
@@ -38,12 +42,17 @@ router.get(
   asyncHandler(async (req, res) => {
     const role = String(req.query.role || '').trim();
     const search = String(req.query.search || '').trim();
+    const approvalStatus = String(req.query.approvalStatus || '').trim();
     const where = [];
     const params = [];
 
     if (ROLES.includes(role)) {
       where.push('role = ?');
       params.push(role);
+    }
+    if (['pending', 'approved', 'rejected'].includes(approvalStatus)) {
+      where.push('approval_status = ?');
+      params.push(approvalStatus);
     }
     if (search) {
       where.push('(nama LIKE ? OR email LIKE ?)');
@@ -72,11 +81,13 @@ router.post(
   asyncHandler(async (req, res) => {
     const nama = String(req.body.nama || '').trim();
     const email = String(req.body.email || '').trim().toLowerCase();
+    const telepon = String(req.body.telepon || '').trim();
     const password = String(req.body.password || '');
     const role = String(req.body.role || 'buyer');
 
     if (!nama || nama.length > 120) throw new ApiError(400, 'Nama wajib diisi (maksimal 120 karakter).');
     if (!validateEmail(email)) throw new ApiError(400, 'Format email tidak valid.');
+    if (!validatePhone(telepon)) throw new ApiError(400, 'Nomor telepon tidak valid (6-30 karakter, angka/spasi/+/-/()).');
     if (!validatePassword(password)) throw new ApiError(400, 'Password minimal 8 karakter.');
     if (!ROLES.includes(role)) throw new ApiError(400, 'Role tidak valid.');
 
@@ -85,8 +96,8 @@ router.post(
 
     const hash = await bcrypt.hash(password, 12);
     const [result] = await pool.query(
-      'INSERT INTO users (nama, email, password_hash, role, is_active) VALUES (?, ?, ?, ?, 1)',
-      [nama, email, hash, role]
+      'INSERT INTO users (nama, email, telepon, password_hash, role, is_active, approval_status) VALUES (?, ?, ?, ?, ?, 1, ?)',
+      [nama, email, telepon, hash, role, 'approved']
     );
 
     const [rows] = await pool.query(`${USER_SELECT} WHERE id = ?`, [result.insertId]);
@@ -104,6 +115,8 @@ router.put(
 
     const nama = String(req.body.nama ?? current.nama).trim();
     const email = String(req.body.email ?? current.email).trim().toLowerCase();
+    const telepon =
+      req.body.telepon === undefined ? String(current.telepon || '') : String(req.body.telepon).trim();
     const role = String(req.body.role ?? current.role);
     const isActive =
       req.body.isActive === undefined ? Boolean(current.is_active) : Boolean(req.body.isActive);
@@ -111,6 +124,7 @@ router.put(
 
     if (!nama || nama.length > 120) throw new ApiError(400, 'Nama wajib diisi (maksimal 120 karakter).');
     if (!validateEmail(email)) throw new ApiError(400, 'Format email tidak valid.');
+    if (!validatePhone(telepon)) throw new ApiError(400, 'Nomor telepon tidak valid (6-30 karakter, angka/spasi/+/-/()).');
     if (!ROLES.includes(role)) throw new ApiError(400, 'Role tidak valid.');
     if (password !== null && !validatePassword(password)) {
       throw new ApiError(400, 'Password minimal 8 karakter.');
@@ -131,13 +145,14 @@ router.put(
     if (password !== null) {
       const hash = await bcrypt.hash(password, 12);
       await pool.query(
-        'UPDATE users SET nama = ?, email = ?, role = ?, is_active = ?, password_hash = ? WHERE id = ?',
-        [nama, email, role, isActive ? 1 : 0, hash, id]
+        'UPDATE users SET nama = ?, email = ?, telepon = ?, role = ?, is_active = ?, password_hash = ? WHERE id = ?',
+        [nama, email, telepon, role, isActive ? 1 : 0, hash, id]
       );
     } else {
-      await pool.query('UPDATE users SET nama = ?, email = ?, role = ?, is_active = ? WHERE id = ?', [
+      await pool.query('UPDATE users SET nama = ?, email = ?, telepon = ?, role = ?, is_active = ? WHERE id = ?', [
         nama,
         email,
+        telepon,
         role,
         isActive ? 1 : 0,
         id
@@ -200,6 +215,53 @@ router.delete(
 
     await pool.query('DELETE FROM users WHERE id = ?', [id]);
     res.json({ message: 'User berhasil dihapus.' });
+  })
+);
+
+router.post(
+  '/:id/approve',
+  asyncHandler(async (req, res) => {
+    const id = Number(req.params.id);
+    const [rows] = await pool.query(`${USER_SELECT} WHERE id = ? LIMIT 1`, [id]);
+    if (!rows.length) throw new ApiError(404, 'User tidak ditemukan.');
+    const current = rows[0];
+    if (current.role !== 'seller') {
+      throw new ApiError(400, 'Hanya akun seller yang dapat dikonfirmasi.');
+    }
+
+    await pool.query(
+      "UPDATE users SET is_active = 1, approval_status = 'approved' WHERE id = ?",
+      [id]
+    );
+
+    const [updated] = await pool.query(`${USER_SELECT} WHERE id = ?`, [id]);
+    const user = toUser(updated[0]);
+    const phone = normalizeWhatsApp(user.telepon);
+    const message = `Halo ${user.nama}, akun seller Ayiyaaa Anda telah disetujui admin. Silakan masuk ke dashboard untuk mengelola menu: ${req.protocol}://${req.get('host')}/dashboard.html`;
+    const whatsappUrl = phone ? `https://wa.me/${phone}?text=${encodeURIComponent(message)}` : null;
+
+    res.json({ user, whatsappUrl });
+  })
+);
+
+router.post(
+  '/:id/reject',
+  asyncHandler(async (req, res) => {
+    const id = Number(req.params.id);
+    const [rows] = await pool.query(`${USER_SELECT} WHERE id = ? LIMIT 1`, [id]);
+    if (!rows.length) throw new ApiError(404, 'User tidak ditemukan.');
+    const current = rows[0];
+    if (current.role !== 'seller') {
+      throw new ApiError(400, 'Hanya akun seller yang dapat ditolak.');
+    }
+
+    await pool.query(
+      "UPDATE users SET is_active = 0, approval_status = 'rejected' WHERE id = ?",
+      [id]
+    );
+
+    const [updated] = await pool.query(`${USER_SELECT} WHERE id = ?`, [id]);
+    res.json({ user: toUser(updated[0]) });
   })
 );
 

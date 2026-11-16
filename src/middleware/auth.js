@@ -13,7 +13,7 @@ async function loadUser(req, res, next) {
     }
 
     const [rows] = await pool.query(
-      'SELECT id, nama, email, role, is_active, created_at, updated_at FROM users WHERE id = ? LIMIT 1',
+      'SELECT id, nama, email, telepon, role, is_active, approval_status, created_at, updated_at FROM users WHERE id = ? LIMIT 1',
       [req.session.userId]
     );
 

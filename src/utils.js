@@ -37,8 +37,10 @@ function toUser(row) {
     id: row.id,
     nama: row.nama,
     email: row.email,
+    telepon: row.telepon || '',
     role: row.role,
     isActive: Boolean(row.is_active),
+    approvalStatus: row.approval_status || 'approved',
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };

@@ -94,6 +94,7 @@ Tombol **Masuk** di kanan atas menyediakan tombol isi-otomatis untuk ketiga role
 | `/` | publik | Katalog, pencarian, filter kategori, sorting, tombol WhatsApp |
 | `/dashboard.html` | seller, admin | Statistik, pengaturan toko/WA, CRUD produk, stok cepat, CRUD kategori, upload foto |
 | `/admin.html` | admin | Ringkasan user, pencarian/filter role, CRUD user, aktif/nonaktif |
+| `/buyer.html` | buyer | Profil pembeli dan keranjang belanja (tambah/ubah/hapus item, checkout WhatsApp) |
 
 ## Struktur project
 
@@ -137,6 +138,8 @@ Semua respons JSON. Autentikasi memakai cookie session (`credentials: same-origi
 | Method & Path | Akses | Fungsi |
 |---|---|---|
 | `POST /api/auth/login` | publik | Login, set cookie session |
+| `POST /api/auth/register-seller` | publik | Pendaftaran seller mandiri (akun menunggu konfirmasi admin) |
+| `POST /api/auth/register-buyer` | publik | Pendaftaran pembeli mandiri (akun langsung aktif) + konfirmasi WhatsApp |
 | `POST /api/auth/logout` | login | Hapus session |
 | `GET /api/auth/me` | publik | User aktif / `null` |
 | `GET /api/store` | publik | Info toko & nomor WhatsApp |
@@ -155,6 +158,8 @@ Semua respons JSON. Autentikasi memakai cookie session (`credentials: same-origi
 | `POST /api/users` | admin | Buat user |
 | `PUT /api/users/:id` | admin | Ubah user |
 | `PATCH /api/users/:id/status` | admin | `{isActive}` |
+| `POST /api/users/:id/approve` | admin | Konfirmasi akun seller pending dan aktifkan |
+| `POST /api/users/:id/reject` | admin | Tolak akun seller pending |
 | `DELETE /api/users/:id` | admin | Hapus user |
 
 ## Catatan keamanan & produksi
